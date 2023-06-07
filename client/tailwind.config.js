@@ -6,7 +6,8 @@ export default {
             backgroundImage: {
                 "mesh-bright": "url('./assets/background-2.jpg')",
                 "texture": "url('./assets/texture-with-stripes.jpg')",
-                "stripes": "url('./assets/stripes.jpg')"
+                "stripes": "url('./assets/stripes.jpg')",
+                "signup": "url('./assets/signup.svg')",
             },
         },
     },

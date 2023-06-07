@@ -1,13 +1,19 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { MdOutlineLogout } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
 import Logo from "../../assets/logo.svg";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { logIn, logOut } from "../../redux/actions/loginActions";
 
 function Navbar() {
+    const isLoggedIn = useSelector((state: any) => state.loggedIn);
+
     const navigate = useNavigate();
     const userName = "Abhishek";
     const handleLogout = () => {
+        logOut();
         navigate("users/signin");
     };
 
@@ -20,23 +26,39 @@ function Navbar() {
                     </div>
                     <h3>NoteFlow</h3>
                 </div>
+                {isLoggedIn ? (
+                    <div className="flex items-center justify-center gap-4 right-side">
+                        <div className="flex items-center justify-center gap-2 font-normal nav-account">
+                            <AiOutlineUser />
+                            <p>{userName}</p>
+                        </div>
 
-                <div className="flex items-center justify-center gap-4 right-side">
-                    <div className="flex items-center justify-center gap-2 font-normal nav-account">
-                        <AiOutlineUser />
-                        <p>{userName}</p>
+                        <button
+                            onClick={handleLogout}
+                            className="text-base items-center flex gap-2 px-4 py-1  border-white rounded-md nav-logout"
+                            type="button"
+                        >
+                            <p className="">Log Out</p>
+
+                            <MdOutlineLogout className="sm:block hidden" />
+                        </button>
                     </div>
-
-                    <button
-                        onClick={handleLogout}
-                        className="items-center flex gap-2 px-4 py-1 border-[1px] border-white rounded-md nav-logout"
-                        type="button"
-                    >
-                        <p>Log Out</p>
-
-                        <MdOutlineLogout className="" />
-                    </button>
-                </div>
+                ) : (
+                    <div className="flex gap-2 sm:gap-4">
+                        <Link
+                            to="/users/signin"
+                            className=" bg-purple-500 text-white py-1 px-4 rounded-md"
+                        >
+                            Log In
+                        </Link>
+                        <Link
+                            to="/users/signup"
+                            className=" bg-green-500 text-white py-1 px-4 rounded-md"
+                        >
+                            Sign Up
+                        </Link>
+                    </div>
+                )}
             </nav>
         </header>
     );
