@@ -1,21 +1,42 @@
 import { store } from "../store";
 
-function addNote(id: Number, title: string, note: string) {
+export function addNote(title: string, note: string, color: string) {
     store.dispatch({
         type: "ADD_NOTE",
         payload: {
-            id,
             title,
             note,
+            color,
         },
     });
 }
 
-function removeNote(id: number) {
+export function removeNote(id: number) {
     store.dispatch({
         type: "REMOVE_NOTE",
         payload: {
             id,
+        },
+    });
+}
+
+export function editNote(
+    id: number,
+    title: String,
+    note: String,
+    color: String,
+    dateCreated: String,
+    dateModified: String
+) {
+    store.dispatch({
+        type: "EDIT_NOTE",
+        payload: {
+            id,
+            title,
+            note,
+            color,
+            dateCreated,
+            dateModified,
         },
     });
 }
