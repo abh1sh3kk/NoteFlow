@@ -69,9 +69,10 @@ function Editor({
                 {/* article area */}
                 <form
                     onSubmit={handleNoteSubmit}
-                    className="flex flex-col items-start max-w-[924px] text-slate-700 mb-4 h-[600px] gap-4 sm:gap-8 w-full sm:w-auto"
+                    className="flex flex-col items-start mt-6 sm:mt-auto max-w-[924px] text-slate-700 mb-4 h-[600px] gap-4 sm:gap-8 w-full sm:w-auto"
                 >
-                    <div className="flex justify-between w-full sm:max-w-[580px]">
+                    <div 
+                    className="flex items-center justify-between w-full sm:max-w-[580px]">
                         <div>
                             <Colors
                                 selectedColor={selectedColor}

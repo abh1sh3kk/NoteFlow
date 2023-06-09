@@ -16,8 +16,8 @@ function Homepage() {
 
     const [noteDetailsForEditor, setNoteDetailsForEditor] = useState({
         id: "1",
-        title: "Bad title",
-        note: "Bad Note",
+        title: "No Title",
+        note: "",
         color: "#fff6c7",
         dateCreated: "",
         dateModified: "",

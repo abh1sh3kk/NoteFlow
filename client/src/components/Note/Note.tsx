@@ -26,7 +26,7 @@ function Note({ id, title, note, color, dateCreated, dateModified, handleNoteCli
         <>
             <section
                 style={{ backgroundColor: color }}
-                className="w-full px-6 py-6 text-sm flex flex-col justify-between gap-8 rounded-[10px] cursor-pointer"
+                className="w-full px-6 py-6 text-sm flex flex-col justify-between gap-8 rounded-[10px] hover:shadow-sm cursor-pointer"
             >
                 <div className="note-upper flex flex-col gap-4">
                     <h2 className="text-lg line-clamp-1">{title}</h2>
