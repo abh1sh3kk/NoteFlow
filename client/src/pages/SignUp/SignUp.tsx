@@ -8,10 +8,11 @@ function SignUp() {
             <section className="sm:flex sm:border-b-2 sm:border-b-slate-400 sm:gap-32 items-center justify-between">
                 <div className="signup-section sm:w-[340px] px-4">
                     <h1 className="text-xl mb-4 font-medium">Signup</h1>
-                    <form className="flex flex-col gap-3">
+                    <form className="flex flex-col gap-3" method="POST" action="http://localhost:3000/users/signup">
                         <label>
                             <div>Email</div>
                             <input
+                            name="email"
                                 type="email"
                                 className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
                             />
@@ -19,6 +20,7 @@ function SignUp() {
                         <label>
                             <div>Password</div>
                             <input
+                            name="password"
                                 className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
                                 type="password"
                             />
@@ -26,6 +28,7 @@ function SignUp() {
                         <label>
                             <div>Confirm Password</div>
                             <input
+                            name="confirmPassword"
                                 type="password"
                                 className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
                             />

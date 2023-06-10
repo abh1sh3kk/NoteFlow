@@ -20,10 +20,15 @@ function Login() {
 
                 <div className="signup-section sm:min-w-[340px] px-4 my-4">
                     <h1 className="text-xl mb-4 font-medium">Sign In</h1>
-                    <form className="flex flex-col gap-3">
+                    <form
+                        className="flex flex-col gap-3"
+                        method="POST"
+                        action="http://localhost:3000/users/signin"
+                    >
                         <label>
                             <div>Email</div>
                             <input
+                                name="email"
                                 type="email"
                                 className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
                             />
@@ -31,6 +36,7 @@ function Login() {
                         <label className="flex flex-col gap-1">
                             <div>Password</div>
                             <input
+                                name="password"
                                 className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
                                 type="password"
                             />
