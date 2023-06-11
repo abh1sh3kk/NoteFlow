@@ -1,18 +1,35 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import signupImg from "../../assets/signup2.svg";
+import { useSelector } from "react-redux";
 
 function SignUp() {
+    const navigate = useNavigate();
+    const username = useSelector((state: any) => state.userName);
+
+    useEffect(() => {
+        if (username !== "") navigate("/notes");
+    });
+
+    const handleSignUp = () => {
+        const fakeSignUp = () => {
+            fetch("http://localhost:3000/users/signup", { credentials: "include" }).then(() => {
+                navigate("/notes");
+            });
+        };
+        fakeSignUp();
+    };
+
     return (
         <section className="py-4 sm:flex justify-center items-center min-h-[600px]">
             <section className="sm:flex sm:border-b-2 sm:border-b-slate-400 sm:gap-32 items-center justify-between">
                 <div className="signup-section sm:w-[340px] px-4">
                     <h1 className="text-xl mb-4 font-medium">Signup</h1>
-                    <form className="flex flex-col gap-3" method="POST" action="http://localhost:3000/users/signup">
+                    <form onSubmit={handleSignUp} className="flex flex-col gap-3">
                         <label>
                             <div>Email</div>
                             <input
-                            name="email"
+                                name="email"
                                 type="email"
                                 className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
                             />
@@ -20,7 +37,7 @@ function SignUp() {
                         <label>
                             <div>Password</div>
                             <input
-                            name="password"
+                                name="password"
                                 className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
                                 type="password"
                             />
@@ -28,7 +45,7 @@ function SignUp() {
                         <label>
                             <div>Confirm Password</div>
                             <input
-                            name="confirmPassword"
+                                name="confirmPassword"
                                 type="password"
                                 className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
                             />

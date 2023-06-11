@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ImGoogle, ImGoogle3 } from "react-icons/im";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import signinImg from "../../assets/signin.svg";
-import { logIn } from "../../redux/actions/loginActions";
+import { useSelector } from "react-redux";
 
 function Login() {
     const navigate = useNavigate();
+    const username = useSelector((state: any) => state.userName);
+
+    useEffect(() => {
+        if (username !== "") navigate("/");
+    });
+
     const handleLogin = () => {
-        logIn();
-        navigate("/notes");
+        const fakeLogin = () => {
+            fetch("http://localhost:3000/users/signin", { credentials: "include" }).then(() => {
+                navigate("/notes");
+            });
+        };
+
+        fakeLogin();
     };
+
     return (
         <section className=" sm:min-h-[600px] sm:flex flex-col justify-center items-center">
             <div className="w-full sm:w-auto sm:flex gap-4 items-center">
@@ -20,11 +32,7 @@ function Login() {
 
                 <div className="signup-section sm:min-w-[340px] px-4 my-4">
                     <h1 className="text-xl mb-4 font-medium">Sign In</h1>
-                    <form
-                        className="flex flex-col gap-3"
-                        method="POST"
-                        action="http://localhost:3000/users/signin"
-                    >
+                    <form className="flex flex-col gap-3" onSubmit={handleLogin}>
                         <label>
                             <div>Email</div>
                             <input
@@ -53,7 +61,6 @@ function Login() {
                         <button
                             type="submit"
                             className="flex items-center justify-center gap-2 w-full bg-white text-slate-600 py-2 mt-2 rounded-md "
-                            onClick={handleLogin}
                         >
                             {/* <ImGoogle3 /> */}
                             <FcGoogle className="text-xl" />

@@ -1,20 +1,33 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { MdOutlineLogout } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
 import Logo from "../../assets/logo.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { logIn, logOut } from "../../redux/actions/loginActions";
+import { store } from "../../redux/store";
+import { clearNotes } from "../../redux/actions/noteActions";
 
 function Navbar() {
-    const isLoggedIn = useSelector((state: any) => state.loggedIn);
-
     const navigate = useNavigate();
-    const userName = "Abhishek";
+
+    const username = useSelector((state: any) => state.userName);
+    const userExists = username !== "";
+
     const handleLogout = () => {
-        logOut();
-        navigate("users/signin");
+        fetch("http://localhost:3000/users/signout", { credentials: "include" }).then(() => {
+            store.dispatch({
+                type: "REMOVE_USER",
+            });
+
+            clearNotes();
+
+            navigate("/users/signup");
+        });
+    };
+
+    const handleLogIn = async () => {
+        await fetch("http://localhost:3000/users/signin", { credentials: "include" });
     };
 
     return (
@@ -26,11 +39,11 @@ function Navbar() {
                     </div>
                     <h3>NoteFlow</h3>
                 </div>
-                {isLoggedIn ? (
+                {userExists ? (
                     <div className="flex items-center justify-center gap-4 right-side">
                         <div className="flex items-center justify-center gap-2 font-normal nav-account">
                             <AiOutlineUser />
-                            <p>{userName}</p>
+                            <p>{username}</p>
                         </div>
 
                         <button

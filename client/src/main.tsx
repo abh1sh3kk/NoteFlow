@@ -19,7 +19,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "",
-                element: <SignUp />,
+                element: <Protected Component={Homepage} />,
             },
             {
                 path: "users/signin",
@@ -41,8 +41,8 @@ const router = createBrowserRouter([
 const rootElement = document.getElementById("root");
 ReactDOM.createRoot(rootElement!).render(
     // <React.StrictMode>
-        <Provider store={store}>
-            <RouterProvider router={router} />
-        </Provider>
+    <Provider store={store}>
+        <RouterProvider router={router} />
+    </Provider>
     // </React.StrictMode>
 );

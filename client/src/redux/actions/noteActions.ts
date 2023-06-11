@@ -1,4 +1,5 @@
 import { store } from "../store";
+import { fetchUser } from "./userActions";
 
 export function addNote(title: string, note: string, color: string) {
     store.dispatch({
@@ -18,6 +19,38 @@ export function removeNote(id: number) {
             id,
         },
     });
+}
+
+export async function fetchNotes() {
+    try {
+        const res = await fetch("http://localhost:3000/data/notes", { credentials: "include" });
+        const data = await res.json();
+        store.dispatch({
+            type: "FETCH_SUCCESS",
+            payload: {
+                data,
+            },
+        });
+    } catch (error) {
+        store.dispatch({
+            type: "FETCH_FAILURE",
+            payload: {
+                data: [],
+                error: error.message,
+            },
+        });
+    }
+}
+
+export function fetchUserData() {
+    fetchUser();
+    fetchNotes();
+}
+
+export function clearNotes() {
+    store.dispatch({
+        type: "CLEAR_NOTE",
+    })
 }
 
 export function editNote(
@@ -40,21 +73,3 @@ export function editNote(
         },
     });
 }
-
-// store.dispatch({
-//     type: "ADD_NOTE",
-//     payload: {
-//         id: 2,
-//         title: "Title",
-//         note: "This is the note",
-//     },
-// });
-
-// store.dispatch({
-//     type: "ADD_NOTE",
-//     payload: {
-//         id: 3,
-//         title: "Third",
-//         note: "This is the third note",
-//     },
-// });
