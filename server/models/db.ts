@@ -4,7 +4,7 @@ config();
 
 (async () => {
     try {
-        const CONN = await mongoose.connect("mongodb://127.0.0.1:27017");
+        const CONN = await mongoose.connect("mongodb://127.0.0.1:27017/NoteFlow");
         console.log("Connection Successful");
     } catch (e) {
         console.log("Erorr in connection.", e);

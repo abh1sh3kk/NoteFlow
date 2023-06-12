@@ -1,15 +1,17 @@
 // import "./models/db";
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import "./models/db";
 import cookieParser from "cookie-parser";
+import userRouter from "./routes/userRoute";
 const app = express();
 // ----------------------------------------------
 
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(cookieParser());
+app.use("/users", userRouter);
 
 // ----------------------------------------------
 const validateCookie = (req: Request) => {
@@ -19,20 +21,11 @@ const validateCookie = (req: Request) => {
         return true;
     }
 };
-function authenticateUser(req: Request, res: Response, next: NextFunction) {
-    const { email, password } = req.body;
-    console.log(req.body);
 
-    const validateCredentials = (email: string, password: string) => {
-        console.log(email, password);
-        return true;
-    };
-
-    const isValidatedUser = validateCredentials(email, password);
-
-    next();
-}
 // ----------------------------------------------
+
+// ----------------------------------------------
+
 app.listen("3000", () => {
     console.log("Listening");
 });
@@ -40,40 +33,6 @@ app.listen("3000", () => {
 app.get("/", (req, res: Response) => {
     console.log(res.cookie);
     res.send("I am up and running");
-});
-
-app.get("/users/signup", (req, res) => {
-    res.cookie("access_token", "Abhishek");
-    res.send("Sign up successful");
-});
-
-app.get("/users/signin", (req, res) => {
-    res.cookie("access_token", "Abhishek");
-    console.log("Sign in with get successful");
-    res.end();
-});
-
-app.post("/users/signin", authenticateUser, (req, res) => {
-    res.cookie("access_token", "Abhishek");
-    console.log("Sign in with post successful");
-    res.end();
-});
-
-app.get("/users/signout", (req, res) => {
-    res.clearCookie("access_token");
-    console.log("Cookies has been cleared.");
-    res.end();
-});
-
-app.post("/users/signup", (req, res) => {
-    res.cookie("access_token", "Abhishek");
-    console.log("sign up with post successful");
-    res.end();
-});
-
-app.get("/users/email", (req, res) => {
-    if (!req.cookies.access_token) return res.json("");
-    return res.json(req.cookies.access_token);
 });
 
 app.get("/data/notes", (req, res) => {

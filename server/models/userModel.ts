@@ -55,6 +55,13 @@ const userSchema = new Schema({
     sessions: [String],
 });
 
-const userData = model("User Data", userSchema);
+// {
+//     email: "abhishekacharya171@gmail.com",
+//     password: "this", 
+//     noteList: [ {..}, {..}, {..}],
+//     sessions: [ {}, {}, {} ]
+// }
+
+const userData = model("UserData", userSchema);
 
 export default userData;

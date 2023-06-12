@@ -13,7 +13,11 @@ function SignUp() {
 
     const handleSignUp = () => {
         const fakeSignUp = () => {
-            fetch("http://localhost:3000/users/signup", { credentials: "include" }).then(() => {
+            fetch("http://localhost:3000/users/signup", {
+                method: "post",
+                credentials: "include",
+                body: JSON.stringify({ email: "abhishekacharya@gmail.com", password: "password" }),
+            }).then(() => {
                 navigate("/notes");
             });
         };
