@@ -2,7 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import userData from "../models/userModel";
 import bcrypt from "bcrypt";
-import { authenticateUser } from "../middlewares/auth";
+import { MyRequest, authenticateUser } from "../middlewares/auth";
 const router = express.Router();
 
 router.get("/signup", (req, res) => {
@@ -16,10 +16,50 @@ router.get("/signin", (req, res) => {
     res.end();
 });
 
-router.post("/signin", authenticateUser, (req, res) => {
-    res.cookie("access_token", "Abhishek");
-    console.log("Sign in with post successful");
-    res.end();
+router.post("/signin", async (req: MyRequest, res) => {
+    const { email, password } = req.body;
+
+    // -------------------- Validity Check -----------------------
+    const currentUser = await userData.findOne({ email });
+
+    if (currentUser === null) {
+        return res.send("Sorry, the user doesn't exist.");
+    }
+
+    const passwordInDatabase: string | undefined = currentUser.password;
+
+    let isPasswordValid =
+        passwordInDatabase && (await bcrypt.compare(password, passwordInDatabase));
+
+    if (!isPasswordValid) return res.send("Sorry the password is wrong.");
+
+    // -------------------- Validity Check -----------------------
+
+    // -------------------- GENERATE JWT -----------------------
+
+    const ACCESS_TOKEN_KEY = "SOME_RANDOM_KEY";
+    const REFRESH_TOKEN_KEY = "SOME_RANDOM_KEY_2";
+
+    const accessToken = jwt.sign({ email }, ACCESS_TOKEN_KEY, {
+        algorithm: "HS256",
+        expiresIn: "10m",
+    });
+
+    const refreshToken: string = jwt.sign({ email }, REFRESH_TOKEN_KEY, {
+        algorithm: "HS256",
+        expiresIn: "1y",
+    });
+
+    // -------------------- GENERATE JWT -----------------------
+
+    // -------------------- STORE IT TO DATABASE -----------------------
+    const updatedData = {  sessions: [...currentUser.sessions, refreshToken] };
+    await userData.findOneAndUpdate({ email: email }, updatedData);
+
+    // -------------------- STORE IT TO DATABASE -----------------------
+
+    res.cookie("tokens", JSON.stringify({ accessToken: accessToken, refreshToken: refreshToken }));
+    return res.status(200).json({ accessToken, refreshToken });
 });
 
 router.get("/signout", (req, res) => {
@@ -29,7 +69,6 @@ router.get("/signout", (req, res) => {
 });
 
 router.post("/signup", async (req, res) => {
-    console.log(req.body.email, req.body.password);
     const { email, password } = req?.body;
 
     // -------------------- Validity Check -----------------------
@@ -46,6 +85,7 @@ router.post("/signup", async (req, res) => {
     if (userExists) {
         return res.status(400).send("Sorry, the email already exists");
     }
+
     // -------------------- Validity Check -----------------------
 
     // -------------------- GENERATE JWT -----------------------
@@ -71,7 +111,7 @@ router.post("/signup", async (req, res) => {
     let salt;
 
     try {
-        salt = await bcrypt.genSalt(10);
+        salt = await bcrypt.genSalt(COST_FACTOR);
         encryptedPassword = await bcrypt.hash(password, salt);
     } catch (e) {
         console.log("Error in encrypting the password. ", e);
@@ -79,10 +119,11 @@ router.post("/signup", async (req, res) => {
 
     const userDataToStore = {
         email,
-        encryptedPassword,
+        password: encryptedPassword,
         noteList: [],
         sessions: [refreshToken],
     };
+
     try {
         await userData.create(userDataToStore);
     } catch (e) {
@@ -98,8 +139,6 @@ router.post("/signup", async (req, res) => {
     return res.status(200).json({ accessToken, refreshToken });
 
     // -------------------- RETURN THE RESPONSE -----------------------
-
-    res.end();
 });
 
 router.get("/email", (req, res) => {

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-interface MyRequest extends Request {
+export interface MyRequest extends Request {
     body: {
         email: string;
         password: string;
