@@ -3,7 +3,12 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import "./models/db";
 import cookieParser from "cookie-parser";
-import userRouter from "./routes/userRoute";
+import userRouter, { generateTokens } from "./routes/userRoute";
+import { config } from "dotenv";
+config();
+import jwt, { JwtPayload } from "jsonwebtoken";
+import userData from "./models/userModel";
+import { INote } from "./models/userModel";
 const app = express();
 // ----------------------------------------------
 
@@ -13,13 +18,74 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(cookieParser());
 app.use("/users", userRouter);
 
-// ----------------------------------------------
-const validateCookie = (req: Request) => {
-    if (req.cookies.access_token !== "Abhishek") {
-        return false;
-    } else {
-        return true;
+export const getAccessToken = (req: Request) => {
+    const extractedAccessToken: string = getAccessTokenFromRequest(req);
+    const extractedRefreshToken: string = getRefreshTokenFromRequest(req);
+
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(extractedAccessToken, process.env.ACCESS_TOKEN_KEY!);
+    } catch (err) {
+        console.log("Error in decoding access token");
     }
+
+    if (decodedToken) return extractedAccessToken;
+
+    let refreshDecoded: any;
+    try {
+        refreshDecoded = jwt.verify(extractedRefreshToken, process.env.REFRESH_TOKEN_KEY!);
+    } catch (err) {
+        console.log("Error in decoding refresh token");
+    }
+
+    if (!refreshDecoded) return "";
+
+    const { accessToken } = generateTokens(refreshDecoded.email);
+
+    return accessToken;
+};
+
+export const getPayloadFromToken = (access_token: string): any => {
+    const decodedJWT: string | jwt.JwtPayload = jwt.decode(access_token) || {};
+    return decodedJWT;
+};
+
+const getNoteFromEmail = async (email: string) => {
+    const currentUser = await userData.findOne({ email }, { noteList: true });
+    return currentUser?.noteList || [];
+};
+
+export const getAccessTokenFromRequest = (req: Request) => {
+    const tokens_string: string = req?.cookies?.tokens;
+    const tokens = tokens_string && JSON.parse(tokens_string);
+    const access_token: string = tokens?.accessToken || "";
+
+    return access_token;
+};
+
+export const getRefreshTokenFromRequest = (req: Request) => {
+    const tokens_string: string = req?.cookies?.tokens || "";
+    const tokens = tokens_string && JSON.parse(tokens_string);
+    const refresh_token: string = tokens?.refreshToken || "";
+
+    return refresh_token;
+};
+
+export interface IPayload {
+    email?: string;
+    iat?: number;
+    exp?: number;
+}
+
+// ----------------------------------------------
+export const getUserEmail = (req: Request) => {
+    const access_token: string = getAccessTokenFromRequest(req);
+    const payload: IPayload = getPayloadFromToken(access_token) || {};
+    const email = payload.email;
+
+    if (!email) return "";
+
+    return email;
 };
 
 // ----------------------------------------------
@@ -30,18 +96,12 @@ app.listen("3000", () => {
     console.log("Listening");
 });
 
-app.get("/", (req, res: Response) => {
-    console.log(res.cookie);
-    res.send("I am up and running");
-});
+app.get("/data/notes", async (req, res) => {
+    const access_token: string = getAccessToken(req);
 
-app.get("/data/notes", (req, res) => {
-    const isCookieValid = validateCookie(req);
-    console.log(req.cookies);
+    const extractedPayload: any = getPayloadFromToken(access_token);
 
-    if (!isCookieValid) return res.json({});
-
-    const initialNote = [
+    let notes: any = [
         {
             id: 2,
             title: "Abhishek is a hero",
@@ -108,5 +168,7 @@ app.get("/data/notes", (req, res) => {
         },
     ];
 
-    res.json(initialNote);
+    if (extractedPayload) notes = await getNoteFromEmail(extractedPayload.email);
+
+    res.json(notes);
 });
