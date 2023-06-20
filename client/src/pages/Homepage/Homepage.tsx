@@ -1,25 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Note from "../../components/Note/Note";
 import { AiOutlinePlus } from "react-icons/ai";
 import { CiSearch } from "react-icons/ci";
 import { useSelector } from "react-redux";
 import { NoteInterface } from "../../interfaces/interfaces";
 import { sortById } from "./../../utilities/others";
-import { fetchUserData } from "../../redux/actions/noteActions";
 import Editor from "../../components/Editor/Editor";
-import { useNavigate } from "react-router-dom";
 
 function Homepage() {
-    const navigate = useNavigate();
-
     const noteData = useSelector((state: any) => state.notes);
-    const username = useSelector((state: any) => state.userName);
-
-    useEffect(() => {
-        fetchUserData();
-        if (username === "") console.log("username ");
-        // navigate("/users/signup");
-    }, []);
 
     const sortedNotes = sortById([...noteData], 1);
 
