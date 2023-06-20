@@ -10,8 +10,8 @@ function Login() {
     const username = useSelector((state: any) => state.userName);
 
     useEffect(() => {
-        if (username !== "") navigate("/");
-    });
+        if (username !== "") navigate("/notes");
+    }, []);
 
     const handleLogin = () => {
         const fakeLogin = () => {
@@ -20,7 +20,14 @@ function Login() {
             });
         };
 
-        fakeLogin();
+        const submitFormData = () => {
+            fetch("http://localhost:3000/users/signin", {
+                credentials: "include",
+                method: "POST",
+            }).then(() => {});
+        };
+
+        submitFormData();
     };
 
     return (

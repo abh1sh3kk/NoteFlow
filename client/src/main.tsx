@@ -18,7 +18,7 @@ const router = createBrowserRouter([
         element: <RootLayout />,
         children: [
             {
-                path: "",
+                path: "/",
                 element: <Protected Component={Homepage} />,
             },
             {
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
                 element: <SignUp />,
             },
             {
-                path: "notes",
+                path: "/notes",
                 element: <Protected Component={Homepage} />,
             },
         ],

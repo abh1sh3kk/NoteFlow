@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-interface INote {
+export interface INote {
     id: Number;
     title: String;
     note: String;
@@ -54,13 +54,6 @@ const userSchema = new Schema({
     },
     sessions: [String],
 });
-
-// {
-//     email: "abhishekacharya171@gmail.com",
-//     password: "this", 
-//     noteList: [ {..}, {..}, {..}],
-//     sessions: [ {}, {}, {} ]
-// }
 
 const userData = model("UserData", userSchema);
 

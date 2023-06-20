@@ -11,7 +11,7 @@ import { clearNotes } from "../../redux/actions/noteActions";
 function Navbar() {
     const navigate = useNavigate();
 
-    const username = useSelector((state: any) => state.userName);
+    const username: string = useSelector((state: any) => state.userName);
     const userExists = username !== "";
 
     const handleLogout = () => {

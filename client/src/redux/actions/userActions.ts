@@ -23,7 +23,6 @@ export async function fetchUser() {
                 error: e.message,
             },
         });
-        console.error(e);
     }
 }
 
