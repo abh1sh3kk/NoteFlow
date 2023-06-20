@@ -1,27 +1,56 @@
-import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, json, useNavigate } from "react-router-dom";
 import signupImg from "../../assets/signup2.svg";
-import { useSelector } from "react-redux";
 
 function SignUp() {
     const navigate = useNavigate();
-    const username = useSelector((state: any) => state.userName);
-
-    useEffect(() => {
-        if (username !== "") navigate("/notes");
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+        confirmPassword: "",
     });
 
-    const handleSignUp = () => {
-        const fakeSignUp = () => {
-            fetch("http://localhost:3000/users/signup", {
-                method: "post",
-                credentials: "include",
-                body: JSON.stringify({ email: "abhishekacharya@gmail.com", password: "password" }),
-            }).then(() => {
-                navigate("/notes");
+    const handleInputChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSignUp = (e: Event) => {
+        e.preventDefault();
+        console.log("The data I am about to submit is: ", formData);
+
+        fetch("http://localhost:3000/users/signup", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        })
+            .then((response) => {
+                if (response.ok) navigate("/notes");
+                else if (response.status === 409) {
+                    console.log("Sorry the email already exists.");
+                }
+            })
+            .catch((e) => {
+                console.log("Sign up failed and the reason is ", e);
             });
-        };
-        fakeSignUp();
+
+        // fetch("http://localhost:3000/users/signup", {
+        //     method: "POST",
+        //     credentials: "include",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify(formData),
+        // })
+        //     .then((response) => {
+        //         if (response.ok) navigate("/notes");
+        //         else console.log("Response is not OK");
+        //     })
+        //     .catch((e) => {
+        //         console.log("Sign up failed and the reason is ", e);
+        //     });
     };
 
     return (
@@ -36,6 +65,8 @@ function SignUp() {
                                 name="email"
                                 type="email"
                                 className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
+                                value={formData.email}
+                                onChange={handleInputChange}
                             />
                         </label>
                         <label>
@@ -43,7 +74,9 @@ function SignUp() {
                             <input
                                 name="password"
                                 className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
+                                value={formData.password}
                                 type="password"
+                                onChange={handleInputChange}
                             />
                         </label>
                         <label>
@@ -52,6 +85,8 @@ function SignUp() {
                                 name="confirmPassword"
                                 type="password"
                                 className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
+                                value={formData.confirmPassword}
+                                onChange={handleInputChange}
                             />
                         </label>
                         <button
