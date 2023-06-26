@@ -15,34 +15,24 @@ import { store } from "./redux/store";
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <RootLayout />,
-        children: [
-            {
-                path: "/",
-                element: <Protected Component={Homepage} />,
-            },
-            {
-                path: "users/signin",
-                element: <Login />,
-            },
-            {
-                path: "users/signup",
-                element: <SignUp />,
-            },
-            {
-                path: "/notes",
-                element: <Protected Component={Homepage} />,
-            },
-        ],
+        element: <Homepage />,
+    },
+    {
+        path: "users/signin",
+        element: <Login />,
+    },
+    {
+        path: "users/signup",
+        element: <SignUp />,
+    },
+    {
         errorElement: <ErrorPage />,
     },
 ]);
 
 const rootElement = document.getElementById("root");
 ReactDOM.createRoot(rootElement!).render(
-    // <React.StrictMode>
     <Provider store={store}>
         <RouterProvider router={router} />
     </Provider>
-    // </React.StrictMode>
 );
