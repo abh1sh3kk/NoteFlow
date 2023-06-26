@@ -3,11 +3,15 @@ import { store } from "../store";
 import { clearNotes } from "./noteActions";
 
 export async function fetchUser() {
+    const userNameFromEmail = (email: string): string => {
+        return email.split("@")[0];
+    };
     try {
-        const res_username = await fetch("http://localhost:3000/users/email", {
+        const res_email = await fetch("http://localhost:3000/users/email", {
             credentials: "include",
         });
-        const username: string = await res_username.json();
+        const email: string = await res_email.json();
+        const username: string = userNameFromEmail(email);
 
         store.dispatch({
             type: "USER_FETCH_SUCCESS",
@@ -28,6 +32,7 @@ export async function fetchUser() {
 
 export async function removeUser() {
     try {
+        // clearing cookies from client side should work
         await fetch("http://localhost:3000/users/signout", { credentials: "include" });
         clearNotes();
     } catch (err) {

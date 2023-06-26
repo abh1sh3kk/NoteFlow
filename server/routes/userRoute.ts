@@ -5,8 +5,10 @@ import bcrypt from "bcrypt";
 import { MyRequest, authenticateUser } from "../middlewares/auth";
 import { config } from "dotenv";
 import { getAccessTokenFromRequest, getPayloadFromToken, getUserEmail } from "..";
+import cookieParser from "cookie-parser";
 config();
 const router = express.Router();
+router.use(cookieParser());
 
 export const generateTokens = (payload: any) => {
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_KEY!, {
@@ -24,13 +26,8 @@ export const generateTokens = (payload: any) => {
 // ---------------------Test-----------------
 router.get("/email", (req, res) => {
     const email: string = getUserEmail(req);
-    if (email === "") return res.json("");
 
-    const userNameFromEmail = (email: string): string => {
-        return email.split("@")[0];
-    };
-    const username: string = userNameFromEmail(email);
-    return res.json(username);
+    return res.status(200).json(email);
 });
 
 router.get("/signup", (req, res) => {
@@ -48,10 +45,10 @@ router.get("/signin", (req, res) => {
 
 // ---------------------Real-----------------
 router.get("/signout", (req, res) => {
-    res.clearCookie("accesstoken");
+    // res.clearCookie("accesstoken");
     res.clearCookie("tokens");
     console.log("Cookies has been cleared.");
-    res.end();
+    return res.status(204).end();
 });
 
 router.post("/signin", async (req: MyRequest, res) => {
@@ -61,7 +58,8 @@ router.post("/signin", async (req: MyRequest, res) => {
     const currentUser = await userData.findOne({ email });
 
     if (currentUser === null) {
-        return res.send("Sorry, the user doesn't exist.");
+        console.log("User doesn't exist.");
+        return res.status(400).send("Sorry, the user doesn't exist.");
     }
 
     const passwordInDatabase: string | undefined = currentUser.password;
@@ -69,7 +67,7 @@ router.post("/signin", async (req: MyRequest, res) => {
     let isPasswordValid =
         passwordInDatabase && (await bcrypt.compare(password, passwordInDatabase));
 
-    if (!isPasswordValid) return res.send("Sorry the password is wrong.");
+    if (!isPasswordValid) return res.status(401).send("Sorry the password is wrong.");
 
     // -------------------- Validity Check -----------------------
 
@@ -84,18 +82,16 @@ router.post("/signin", async (req: MyRequest, res) => {
     await userData.findOneAndUpdate({ email: email }, updatedData);
 
     // -------------------- STORE IT TO DATABASE -----------------------
-
+    console.log("tokens", JSON.stringify({ accessToken: accessToken, refreshToken: refreshToken }));
+    console.log("sign in with post successful");
     return res
+        .status(201)
         .cookie("tokens", JSON.stringify({ accessToken: accessToken, refreshToken: refreshToken }))
         .end();
-    // return res.status(200).json({ accessToken, refreshToken });
 });
 
 router.post("/signup", async (req, res) => {
-    console.log("I am raw request body: ", req.body);
     const { email, password } = req?.body;
-    console.log("I am body data");
-    console.log(email, password);
 
     // -------------------- Validity Check -----------------------
     async function emailAlreadyExists(email: string) {
@@ -149,8 +145,8 @@ router.post("/signup", async (req, res) => {
 
     // -------------------- RETURN THE RESPONSE -----------------------
 
-    console.log("tokens", JSON.stringify({ accessToken: accessToken, refreshToken: refreshToken }));
-    console.log("sign up with post successful");
+    console.log("Sign up with post successful");
+
     return res
         .status(201)
         .cookie("tokens", JSON.stringify({ accessToken: accessToken, refreshToken: refreshToken }))
@@ -160,11 +156,7 @@ router.post("/signup", async (req, res) => {
 });
 
 router.get("/data/populate", async (req: MyRequest, res) => {
-    const accessToken = getAccessTokenFromRequest(req);
-
-    const payload: any = getPayloadFromToken(accessToken);
-
-    const email: string = payload?.email;
+    const email: string = getUserEmail(req);
 
     let readyMadeNotes = [
         {
@@ -235,7 +227,7 @@ router.get("/data/populate", async (req: MyRequest, res) => {
 
     await userData.findOneAndUpdate({ email }, { noteList: readyMadeNotes });
 
-    res.send("Done");
+    return res.status(204);
 });
 
 export default router;
