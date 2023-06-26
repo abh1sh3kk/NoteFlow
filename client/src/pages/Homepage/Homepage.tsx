@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Note from "../../components/Note/Note";
 import { AiOutlinePlus } from "react-icons/ai";
 import { CiSearch } from "react-icons/ci";
@@ -6,11 +6,29 @@ import { useSelector } from "react-redux";
 import { NoteInterface } from "../../interfaces/interfaces";
 import { sortById } from "./../../utilities/others";
 import Editor from "../../components/Editor/Editor";
+import Navbar from "../../components/Navbar/Navbar";
+import { useNavigate } from "react-router-dom";
+import { fetchNotes } from "../../redux/actions/noteActions";
+import { fetchUser } from "../../redux/actions/userActions";
+import { store } from "../../redux/store";
 
 function Homepage() {
+    const navigate = useNavigate();
+    fetchUser();
+    const username: string = useSelector((state: any) => state.userName);
     const noteData = useSelector((state: any) => state.notes);
 
-    const sortedNotes = sortById([...noteData], 1);
+    useEffect(() => {
+        if (username === "") navigate("/users/signup");
+        else fetchNotes();
+    }, [username]);
+
+
+    const [sortedNotes, setSortedNotes] = useState(noteData);
+
+    useEffect(() => {
+        setSortedNotes(sortById([...noteData], 1));
+    }, [noteData]);
 
     // -------------------- Struggle to open editor ---------------------
     let [mode, setMode] = useState("create");
@@ -68,7 +86,8 @@ function Homepage() {
     };
 
     return (
-        <>
+        <main className="bg-mesh-bright bg-cover min-h-screen">
+            <Navbar />
             <div className="w-full flex justify-center pb-8">
                 <section className="w-full max-w-[965px] flex flex-col gap-4 px-4 lg:px-0">
                     <div className="create-note-area flex justify-between">
@@ -89,9 +108,13 @@ function Homepage() {
                             />
                         </div>
                     </div>
-                    <div className="note-container content-center grid gap-4 grid-cols-[repeat(auto-fill,minmax(296px,1fr))]">
-                        {noteList}
-                    </div>
+                    {noteList.length === 0 ? (
+                        <div>I am empty</div>
+                    ) : (
+                        <div className="note-container content-center grid gap-4 grid-cols-[repeat(auto-fill,minmax(296px,1fr))]">
+                            {noteList}
+                        </div>
+                    )}
                 </section>
             </div>
 
@@ -102,7 +125,7 @@ function Homepage() {
                     noteDetails={noteDetailsForEditor}
                 />
             )}
-        </>
+        </main>
     );
 }
 
