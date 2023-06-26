@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MdOutlineLogout } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
@@ -6,13 +6,17 @@ import Logo from "../../assets/logo.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { store } from "../../redux/store";
-import { clearNotes } from "../../redux/actions/noteActions";
+import { clearNotes, fetchNotes } from "../../redux/actions/noteActions";
 
 function Navbar() {
     const navigate = useNavigate();
 
     const username: string = useSelector((state: any) => state.userName);
-    const userExists = username !== "";
+    const [userExists, setUserExists] = useState(false);
+
+    useEffect(() => {
+        setUserExists(username !== "");
+    }, [username]);
 
     const handleLogout = () => {
         fetch("http://localhost:3000/users/signout", { credentials: "include" }).then(() => {
@@ -26,6 +30,14 @@ function Navbar() {
         });
     };
 
+    const populateDB = async () => {
+        try {
+            await fetch("http://localhost:3000/users/data/populate", { credentials: "include" });
+            fetchNotes();
+        } catch (e) {
+            console.log("Error in populating because ", e.message);
+        }
+    };
     const handleLogIn = async () => {
         await fetch("http://localhost:3000/users/signin", { credentials: "include" });
     };
@@ -37,7 +49,7 @@ function Navbar() {
                     <div>
                         <img src={Logo} alt="" className="w-6" />
                     </div>
-                    <h3>NoteFlow</h3>
+                    <h3 onClick={populateDB}>NoteFlow</h3>
                 </div>
                 {userExists ? (
                     <div className="flex items-center justify-center gap-4 right-side">

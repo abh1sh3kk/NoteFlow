@@ -26,7 +26,7 @@ export const getAccessToken = (req: Request) => {
     try {
         decodedToken = jwt.verify(extractedAccessToken, process.env.ACCESS_TOKEN_KEY!);
     } catch (err) {
-        console.log("Error in decoding access token");
+        decodedToken = null;
     }
 
     if (decodedToken) return extractedAccessToken;
@@ -35,7 +35,7 @@ export const getAccessToken = (req: Request) => {
     try {
         refreshDecoded = jwt.verify(extractedRefreshToken, process.env.REFRESH_TOKEN_KEY!);
     } catch (err) {
-        console.log("Error in decoding refresh token");
+        refreshDecoded = null;
     }
 
     if (!refreshDecoded) return "";
@@ -45,8 +45,9 @@ export const getAccessToken = (req: Request) => {
     return accessToken;
 };
 
-export const getPayloadFromToken = (access_token: string): any => {
-    const decodedJWT: string | jwt.JwtPayload = jwt.decode(access_token) || {};
+export const getPayloadFromToken = (access_token: string) => {
+    const decodedJWT: any = jwt.decode(access_token) || {};
+    // const decodedJWT: string | jwt.JwtPayload = jwt.decode(access_token) || {};
     return decodedJWT;
 };
 
@@ -80,10 +81,8 @@ export interface IPayload {
 // ----------------------------------------------
 export const getUserEmail = (req: Request) => {
     const access_token: string = getAccessTokenFromRequest(req);
-    const payload: IPayload = getPayloadFromToken(access_token) || {};
-    const email = payload.email;
-
-    if (!email) return "";
+    const payload: any = getPayloadFromToken(access_token);
+    const email: string = payload?.email || "";
 
     return email;
 };
@@ -170,5 +169,5 @@ app.get("/data/notes", async (req, res) => {
 
     if (extractedPayload) notes = await getNoteFromEmail(extractedPayload.email);
 
-    res.json(notes);
+    res.status(200).json(notes);
 });
