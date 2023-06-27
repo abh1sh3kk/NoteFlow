@@ -32,7 +32,10 @@ function Navbar() {
 
     const populateDB = async () => {
         try {
+            // if (!userExists) return;
+
             await fetch("http://localhost:3000/users/data/populate", { credentials: "include" });
+            console.log("Hi ");
             fetchNotes();
         } catch (e) {
             console.log("Error in populating because ", e.message);
