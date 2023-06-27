@@ -13,7 +13,8 @@ router.use(cookieParser());
 export const generateTokens = (payload: any) => {
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_KEY!, {
         algorithm: "HS256",
-        expiresIn: "1d",
+        // until I find a way to handle the error when jwt expires
+        expiresIn: "1y",
     });
 
     const refreshToken: string = jwt.sign(payload, process.env.REFRESH_TOKEN_KEY!, {
@@ -82,7 +83,6 @@ router.post("/signin", async (req: MyRequest, res) => {
     await userData.findOneAndUpdate({ email: email }, updatedData);
 
     // -------------------- STORE IT TO DATABASE -----------------------
-    console.log("tokens", JSON.stringify({ accessToken: accessToken, refreshToken: refreshToken }));
     console.log("sign in with post successful");
     return res
         .status(201)

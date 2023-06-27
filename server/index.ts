@@ -6,9 +6,8 @@ import cookieParser from "cookie-parser";
 import userRouter, { generateTokens } from "./routes/userRoute";
 import { config } from "dotenv";
 config();
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import userData from "./models/userModel";
-import { INote } from "./models/userModel";
 const app = express();
 // ----------------------------------------------
 
@@ -18,6 +17,17 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(cookieParser());
 app.use("/users", userRouter);
 
+export const getPayloadFromToken = (access_token: string) => {
+    const decodedJWT: any = jwt.decode(access_token) || {};
+    // const decodedJWT: string | jwt.JwtPayload = jwt.decode(access_token) || {};
+    return decodedJWT;
+};
+
+const getNoteFromEmail = async (email: string) => {
+    const currentUser = await userData.findOne({ email }, { noteList: true });
+    return currentUser?.noteList || [];
+};
+
 export const getAccessToken = (req: Request) => {
     const extractedAccessToken: string = getAccessTokenFromRequest(req);
     const extractedRefreshToken: string = getRefreshTokenFromRequest(req);
@@ -25,8 +35,9 @@ export const getAccessToken = (req: Request) => {
     let decodedToken;
     try {
         decodedToken = jwt.verify(extractedAccessToken, process.env.ACCESS_TOKEN_KEY!);
-    } catch (err) {
-        decodedToken = null;
+    } catch (err: any) {
+        console.log("verification failed");
+        // decodedToken = null;
     }
 
     if (decodedToken) return extractedAccessToken;
@@ -43,17 +54,6 @@ export const getAccessToken = (req: Request) => {
     const { accessToken } = generateTokens(refreshDecoded.email);
 
     return accessToken;
-};
-
-export const getPayloadFromToken = (access_token: string) => {
-    const decodedJWT: any = jwt.decode(access_token) || {};
-    // const decodedJWT: string | jwt.JwtPayload = jwt.decode(access_token) || {};
-    return decodedJWT;
-};
-
-const getNoteFromEmail = async (email: string) => {
-    const currentUser = await userData.findOne({ email }, { noteList: true });
-    return currentUser?.noteList || [];
 };
 
 export const getAccessTokenFromRequest = (req: Request) => {
@@ -96,10 +96,6 @@ app.listen("3000", () => {
 });
 
 app.get("/data/notes", async (req, res) => {
-    const access_token: string = getAccessToken(req);
-
-    const extractedPayload: any = getPayloadFromToken(access_token);
-
     let notes: any = [
         {
             id: 2,
@@ -166,8 +162,11 @@ app.get("/data/notes", async (req, res) => {
             dateModified: "June 10, 2023, 10:45 AM",
         },
     ];
+    const access_token: string = getAccessToken(req);
+    const payload: any = getPayloadFromToken(access_token);
+    const email: string = payload?.email || "";
 
-    if (extractedPayload) notes = await getNoteFromEmail(extractedPayload.email);
+    notes = await getNoteFromEmail(email);
 
     res.status(200).json(notes);
 });
