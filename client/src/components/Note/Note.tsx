@@ -3,7 +3,6 @@ import { MdOutlineControlPointDuplicate, MdDeleteForever } from "react-icons/md"
 import { BsPinAngle, BsPinAngleFill } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import { addNote, removeNote } from "../../redux/actions/noteActions";
-import { AiOutlineConsoleSql } from "react-icons/ai";
 
 function Note({ id, title, note, color, dateCreated, dateModified, handleNoteClick }) {
     const isPinned = false;

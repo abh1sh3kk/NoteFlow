@@ -50,7 +50,7 @@ export function fetchUserData() {
 export function clearNotes() {
     store.dispatch({
         type: "CLEAR_NOTE",
-    })
+    });
 }
 
 export function editNote(

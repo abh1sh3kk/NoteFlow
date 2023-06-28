@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, json, useNavigate } from "react-router-dom";
+// @ts-ignore
 import signupImg from "../../assets/signup2.svg";
 import { useSelector } from "react-redux";
 import Navbar from "../../components/Navbar/Navbar";

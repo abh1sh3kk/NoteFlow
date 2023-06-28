@@ -24,8 +24,6 @@ function Login() {
         e.preventDefault();
         const submitFormData = async () => {
             try {
-                console.log("to send", loginData);
-
                 const res = await fetch("http://localhost:3000/users/signin", {
                     credentials: "include",
                     method: "POST",
