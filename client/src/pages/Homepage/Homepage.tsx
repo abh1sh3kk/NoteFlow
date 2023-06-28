@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchNotes } from "../../redux/actions/noteActions";
 import { fetchUser } from "../../redux/actions/userActions";
 import { store } from "../../redux/store";
+import NoteView from "../NoteView/NoteView";
 
 function Homepage() {
     const navigate = useNavigate();
@@ -18,16 +19,15 @@ function Homepage() {
     const username: string = useSelector((state: any) => state.userName);
     const noteData = useSelector((state: any) => state.notes);
 
+    const [searchText, setSearchText] = useState("");
+    const handleSearch = (e: any) => {
+        setSearchText(e.target.value);
+    };
+
     useEffect(() => {
         if (username === "") navigate("/users/signup");
         else fetchNotes();
     }, [username]);
-
-    const [sortedNotes, setSortedNotes] = useState(noteData);
-
-    useEffect(() => {
-        setSortedNotes(sortById([...noteData], 1));
-    }, [noteData]);
 
     // -------------------- Struggle to open editor ---------------------
     let [mode, setMode] = useState("create");
@@ -54,21 +54,6 @@ function Homepage() {
         });
         showPopup();
     };
-
-    const noteList = sortedNotes.map((note: NoteInterface) => {
-        return (
-            <Note
-                id={note.id}
-                key={note.id.toString()}
-                title={note.title}
-                note={note.note}
-                dateCreated={note.dateCreated}
-                dateModified={note.dateModified}
-                color={note.color}
-                handleNoteClick={handleNoteClick}
-            />
-        );
-    });
 
     const handleCreateNote = () => {
         showPopup();
@@ -111,16 +96,16 @@ function Homepage() {
                             <CiSearch className="relative left-8" />
                             <input
                                 placeholder="Search..."
+                                value={searchText}
+                                onChange={handleSearch}
                                 className="ps-8 h-10 w-[8rem] sm:w-auto text-sm rounded-md outline-transparent border-none focus:outline-purple-400 focus:outline-[1px]"
                             />
                         </div>
                     </div>
-                    {noteList.length === 0 ? (
-                        <div>I am empty</div>
+                    {noteData.length === 0 ? (
+                        <div>Your notes are empty. Create new?</div>
                     ) : (
-                        <div className="note-container content-center grid gap-4 grid-cols-[repeat(auto-fill,minmax(296px,1fr))]">
-                            {noteList}
-                        </div>
+                        <NoteView handleNoteClick={handleNoteClick} searchText={searchText} />
                     )}
                 </section>
             </div>
