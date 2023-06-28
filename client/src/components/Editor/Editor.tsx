@@ -9,6 +9,7 @@ function Editor({
     mode,
     noteDetails: { id, title, note, color, dateCreated, dateModified },
 }) {
+
     const [selectedColor, setSelectedColor] = useState(color || "#fff6c7");
 
     const handleColorChange = (color: string) => {
@@ -19,15 +20,14 @@ function Editor({
         hidePopup();
     };
 
-    const handleShortcut = (e: any) => {
-        if (e.key === "Escape") hidePopup();
-    };
-
     useEffect(() => {
-        window.addEventListener("keydown", handleShortcut);
+        const handleKeyboardShortcut = (e: any) => {
+            if (e.key === "Escape") hidePopup();
+        };
+        window.addEventListener("keydown", handleKeyboardShortcut);
 
         return () => {
-            window.removeEventListener("keydown", handleShortcut);
+            window.removeEventListener("keydown", handleKeyboardShortcut);
         };
     }, []);
 
@@ -71,8 +71,7 @@ function Editor({
                     onSubmit={handleNoteSubmit}
                     className="flex flex-col items-start mt-6 sm:mt-auto max-w-[924px] text-slate-700 mb-4 h-[600px] gap-4 sm:gap-8 w-full sm:w-auto"
                 >
-                    <div 
-                    className="flex items-center justify-between w-full sm:max-w-[580px]">
+                    <div className="flex items-center justify-between w-full sm:max-w-[580px]">
                         <div>
                             <Colors
                                 selectedColor={selectedColor}
@@ -98,6 +97,7 @@ function Editor({
                         onChange={handleTitleChange}
                         value={theTitle}
                         autoFocus={true}
+                        placeholder="Enter a Title"
                         className="caret-purple-500 focus:outline-none text-2xl sm:text-3xl font-semibold border-b-2 border-b-purple-600 w-full bg-transparent resize-y"
                     >
                         {/* {title} */}
@@ -110,6 +110,7 @@ function Editor({
                         autoComplete="off"
                         autoCorrect="off"
                         autoCapitalize="off"
+                        placeholder="Describe your note here.."
                         wrap="soft"
                         value={theNote}
                         onChange={handleNoteChange}

@@ -23,7 +23,6 @@ function Homepage() {
         else fetchNotes();
     }, [username]);
 
-
     const [sortedNotes, setSortedNotes] = useState(noteData);
 
     useEffect(() => {
@@ -34,8 +33,8 @@ function Homepage() {
     let [mode, setMode] = useState("create");
 
     const [noteDetailsForEditor, setNoteDetailsForEditor] = useState({
-        id: "1",
-        title: "No Title",
+        id: "",
+        title: "",
         note: "",
         color: "#fff6c7",
         dateCreated: "",
@@ -83,6 +82,14 @@ function Homepage() {
 
     const hidePopup = () => {
         setModalOpen(false);
+        setNoteDetailsForEditor({
+            id: "1",
+            title: "Title",
+            note: "",
+            color: "#fff6c7",
+            dateCreated: "",
+            dateModified: "",
+        });
     };
 
     return (
