@@ -3,7 +3,6 @@ import { ImGoogle, ImGoogle3 } from "react-icons/im";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import signinImg from "../../assets/signin.svg";
-import { useSelector } from "react-redux";
 import Navbar from "../../components/Navbar/Navbar";
 
 function Login() {

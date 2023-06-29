@@ -32,7 +32,7 @@ function Navbar() {
         try {
             if (!userExists) return;
 
-            await fetch("http://localhost:3000/users/data/populate", { credentials: "include" });
+            await fetch("http://localhost:3000/users/notes/populate", { credentials: "include" });
             fetchNotes();
         } catch (e) {
             console.log("Error in populating because ", e.message);

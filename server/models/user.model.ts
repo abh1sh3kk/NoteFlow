@@ -6,7 +6,7 @@ export interface INote {
     note: String;
     color: String;
     dateCreated: String;
-    dataModified: String;
+    dateModified: String;
 }
 
 const noteSchema = new Schema({

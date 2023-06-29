@@ -15,13 +15,13 @@ export const generateTokens = (payload: any) => {
     return { accessToken, refreshToken };
 };
 
-export const getPayloadFromToken = (access_token: string) => {
+export const getPayloadFromToken = (access_token: String) => {
     const decodedJWT: any = jwt.decode(access_token) || {};
     // const decodedJWT: string | jwt.JwtPayload = jwt.decode(access_token) || {};
     return decodedJWT;
 };
 
-export const getAccessToken = (req: MyRequest) => {
+export const getAccessToken = (req: MyRequest): String => {
     const extractedAccessToken: string = getAccessTokenFromRequest(req);
     const extractedRefreshToken: string = getRefreshTokenFromRequest(req);
 

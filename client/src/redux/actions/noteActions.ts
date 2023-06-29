@@ -1,7 +1,25 @@
 import { store } from "../store";
 import { fetchUser } from "./userActions";
 
-export function addNote(title: string, note: string, color: string) {
+export async function addNote(title: string, note: string, color: string) {
+    // add note request, if failed don't add, else add
+
+    const res = await fetch("http://localhost:3000/notes", {
+        credentials: "include",
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            title,
+            note,
+            color,
+        }),
+    });
+
+    if (!res.ok) {
+        console.log("Add failed, store should not be updated. Return the function right now.");
+    }
     store.dispatch({
         type: "ADD_NOTE",
         payload: {
@@ -13,6 +31,7 @@ export function addNote(title: string, note: string, color: string) {
 }
 
 export function removeNote(id: number) {
+    // remove from database, if failed don't remove
     store.dispatch({
         type: "REMOVE_NOTE",
         payload: {
@@ -23,7 +42,7 @@ export function removeNote(id: number) {
 
 export async function fetchNotes() {
     try {
-        const res = await fetch("http://localhost:3000/data/notes", { credentials: "include" });
+        const res = await fetch("http://localhost:3000/notes", { credentials: "include" });
         const data = await res.json();
         store.dispatch({
             type: "FETCH_SUCCESS",
@@ -42,17 +61,6 @@ export async function fetchNotes() {
     }
 }
 
-export function fetchUserData() {
-    fetchUser();
-    fetchNotes();
-}
-
-export function clearNotes() {
-    store.dispatch({
-        type: "CLEAR_NOTE",
-    });
-}
-
 export function editNote(
     id: number,
     title: String,
@@ -61,6 +69,7 @@ export function editNote(
     dateCreated: String,
     dateModified: String
 ) {
+    // edit in db, if failed don't edit
     store.dispatch({
         type: "EDIT_NOTE",
         payload: {
@@ -71,5 +80,16 @@ export function editNote(
             dateCreated,
             dateModified,
         },
+    });
+}
+
+export function fetchUserData() {
+    fetchUser();
+    fetchNotes();
+}
+
+export function clearNotes() {
+    store.dispatch({
+        type: "CLEAR_NOTE",
     });
 }
