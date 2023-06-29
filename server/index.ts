@@ -7,7 +7,7 @@ import userRouter from "./routes/user.route";
 import { config } from "dotenv";
 config();
 import userData from "./models/user.model";
-import { getAccessToken, getAccessTokenFromRequest, getPayloadFromToken } from "./services/tokenService";
+import { getAccessToken, getAccessTokenFromRequest, getPayloadFromToken } from "./services/token.service";
 
 const app = express();
 // ----------------------------------------------
