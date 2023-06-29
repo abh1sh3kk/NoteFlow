@@ -1,10 +1,10 @@
-import express from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import userData from "../models/userModel";
+import express, { NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import userData from "../models/user.model";
 import bcrypt from "bcrypt";
-import { MyRequest, authenticateUser } from "../middlewares/auth";
+import { MyRequest } from "../middlewares/auth";
 import { config } from "dotenv";
-import { getAccessTokenFromRequest, getPayloadFromToken, getUserEmail } from "..";
+import { getUserEmail } from "..";
 import cookieParser from "cookie-parser";
 config();
 const router = express.Router();
@@ -25,6 +25,7 @@ export const generateTokens = (payload: any) => {
 };
 
 // ---------------------Test-----------------
+
 router.get("/email", (req, res) => {
     const email: string = getUserEmail(req);
 
@@ -58,7 +59,7 @@ router.post("/signin", async (req: MyRequest, res) => {
     // -------------------- Validity Check -----------------------
     const currentUser = await userData.findOne({ email });
 
-    if (currentUser === null) {
+   if (currentUser === null) {
         console.log("User doesn't exist.");
         return res.status(400).send("Sorry, the user doesn't exist.");
     }
@@ -157,6 +158,8 @@ router.post("/signup", async (req, res) => {
 
 router.get("/data/populate", async (req: MyRequest, res) => {
     const email: string = getUserEmail(req);
+
+    if (email === "") return res.status(400);
 
     let readyMadeNotes = [
         {
