@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
 export interface INote {
-    id: Number;
+    id: Number | String;
     title: String;
     note: String;
     color: String;
@@ -11,7 +11,7 @@ export interface INote {
 
 const noteSchema = new Schema({
     id: {
-        type: Number,
+        type: Schema.Types.Mixed,
         required: true,
     },
     title: {

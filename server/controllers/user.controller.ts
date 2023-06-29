@@ -104,6 +104,16 @@ const signup = async (req: MyRequest, res: any) => {
         .end();
 };
 
+const signOutFromAllSessions = async (req: MyRequest, res: any) => {
+    const email: string = getUserEmail(req);
+    try {
+        await userData.findOneAndUpdate({ email }, { $set: { sessions: [] } });
+    } catch (e) {
+        console.log("Failed to signout from all sessions");
+    }
+    res.clearCookie("token").status(204).end();
+};
+
 const getEmail = (req: MyRequest, res: any) => {
     const email: string = getUserEmail(req);
 
@@ -115,4 +125,5 @@ export default {
     signin,
     signup,
     getEmail,
+    signOutFromAllSessions,
 };

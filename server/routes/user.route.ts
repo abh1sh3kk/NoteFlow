@@ -12,4 +12,6 @@ router.post("/signup", UserController.signup);
 
 router.get("/email", UserController.getEmail);
 
+router.get("/signoutAll", UserController.signOutFromAllSessions)
+
 export default router;

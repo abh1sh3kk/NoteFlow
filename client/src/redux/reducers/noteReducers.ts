@@ -75,15 +75,13 @@ let lastId = 10;
 export function notesReducer(state: NoteInterface[] = initialNote, action: any) {
     switch (action.type) {
         case "ADD_NOTE":
-            const currentDate = getFormattedDate();
-
             const newNote = {
-                id: ++lastId,
+                id: action.payload.id,
                 title: action.payload.title,
                 note: action.payload.note,
                 color: action.payload.color,
-                dateCreated: currentDate,
-                dateModified: currentDate,
+                dateCreated: action.payload.dateCreated,
+                dateModified: action.payload.dateModified,
             };
             return [...state, newNote];
 
@@ -91,15 +89,13 @@ export function notesReducer(state: NoteInterface[] = initialNote, action: any) 
             return state.filter((note) => note.id !== action.payload.id);
 
         case "EDIT_NOTE":
-            const newDate = getFormattedDate();
-
             const editedNote = {
                 id: action.payload.id,
                 title: action.payload.title,
                 note: action.payload.note,
                 color: action.payload.color,
                 dateCreated: action.payload.dateCreated,
-                dateModified: newDate,
+                dateModified: action.payload.dateModified,
             };
 
             const foundIndex = findIndexFromId(state, action.payload.id);

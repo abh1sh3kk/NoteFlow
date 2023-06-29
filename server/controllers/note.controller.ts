@@ -1,8 +1,8 @@
-import { getUserEmail } from "..";
+import { getNoteFromEmail, getUserEmail } from "..";
 import { MyRequest } from "../middlewares/auth";
-import userData from "../models/user.model";
+import userData, { INote } from "../models/user.model";
 
-export const populateWithNotes = async (req: MyRequest, res: any) => {
+const populateWithNotes = async (req: MyRequest, res: any) => {
     const email: string = getUserEmail(req);
 
     if (email === "") return res.status(400);
@@ -93,4 +93,153 @@ export const populateWithNotes = async (req: MyRequest, res: any) => {
     await userData.findOneAndUpdate({ email }, { noteList: readyMadeNotes });
 
     return res.status(204);
+};
+
+const getNotes = async (req: any, res: any) => {
+    let notes: any = [
+        {
+            id: 2,
+            title: "Abhishek is a hero",
+            note: "One of the biggest problems when working with multiple mobile platforms is push notifications. You need to understand how to interact with every one of the backends from Apple, Google and Microsoft to be able to send the notifications to the devices. Azure has an awesome service called Notifications Hub, part of Service Bus, that help you to simplify this task.",
+            color: "#ded9ff",
+            dateCreated: "June 10, 2023, 10:45 AM",
+            dateModified: "",
+        },
+        {
+            id: 1,
+            title: "Do nothing",
+            note: "One of the biggest problems when working with multiple mobile platforms is push notifications. You need to understand how to interact with every one of the backends from Apple, Google and Microsoft to be able to send the notifications to the devices. Azure has an awesome service called Notifications Hub, part of Service Bus, that help you to simplify this task.",
+            color: "#FFD9EB",
+            dateCreated: "June 10, 2023, 10:45 AM",
+            dateModified: "June 22, 2023",
+        },
+        {
+            id: 3,
+            title: "Do nothing",
+            note: "One of the biggest problems when working with multiple mobile platforms is push notifications. You need to understand how to interact with every one of the backends from Apple, Google and Microsoft to be able to send the notifications to the devices. Azure has an awesome service called Notifications Hub, part of Service Bus, that help you to simplify this task.",
+            color: "#ded9ff",
+            dateCreated: "June 10, 2023, 10:45 AM",
+            dateModified: "June 10, 2023, 10:45 AM",
+        },
+        {
+            id: 4,
+            title: "Do nothing",
+            note: "One of the biggest problems when working with multiple mobile platforms is push notifications. You need to understand how to interact with every one of the backends from Apple, Google and Microsoft to be able to send the notifications to the devices. Azure has an awesome service called Notifications Hub, part of Service Bus, that help you to simplify this task.",
+            color: "#FFF6C7",
+            dateCreated: "June 10, 2023, 10:45 AM",
+            dateModified: "June 10, 2023, 10:45 AM",
+        },
+        {
+            id: 5,
+            title: "Do nothing",
+            note: "One of the biggest problems when working with multiple mobile platforms is push notifications. You need to understand how to interact with every one of the backends from Apple, Google and Microsoft to be able to send the notifications to the devices. Azure has an awesome service called Notifications Hub, part of Service Bus, that help you to simplify this task.",
+            color: "#DDFFE9",
+            dateCreated: "June 10, 2023, 10:45 AM",
+            dateModified: "June 10, 2023, 10:45 AM",
+        },
+        {
+            id: 6,
+            title: "Do nothing",
+            note: "One of the biggest problems when working with multiple mobile platforms is push notifications. You need to understand how to interact with every one of the backends from Apple, Google and Microsoft to be able to send the notifications to the devices. Azure has an awesome service called Notifications Hub, part of Service Bus, that help you to simplify this task.",
+            color: "#FFF6C7",
+            dateCreated: "June 10, 2023, 10:45 AM",
+            dateModified: "June 10, 2023, 10:45 AM",
+        },
+        {
+            id: 7,
+            title: "Do nothing",
+            note: "One of the biggest problems when working with multiple mobile platforms is push notifications. You need to understand how to interact with every one of the backends from Apple, Google and Microsoft to be able to send the notifications to the devices. Azure has an awesome service called Notifications Hub, part of Service Bus, that help you to simplify this task.",
+            color: "#FFF6C7",
+            dateCreated: "June 10, 2023, 10:45 AM",
+            dateModified: "June 10, 2023, 10:45 AM",
+        },
+        {
+            id: 8,
+            title: "Do nothing",
+            note: "One of the biggest problems when working with multiple mobile platforms is push notifications. You need to understand how to interact with every one of the backends from Apple, Google and Microsoft to be able to send the notifications to the devices. Azure has an awesome service called Notifications Hub, part of Service Bus, that help you to simplify this task.",
+            color: "#ded9ff",
+            dateCreated: "June 10, 2023, 10:45 AM",
+            dateModified: "June 10, 2023, 10:45 AM",
+        },
+    ];
+
+    const email = getUserEmail(req);
+    notes = await getNoteFromEmail(email);
+
+    res.status(200).json(notes);
+};
+
+const editNote = async (req: any, res: any) => {
+    const { id, title, note, color, dateCreated, dateModified } = req.body;
+    const email = getUserEmail(req);
+    const noteToStore = { title, note, color, dateCreated, dateModified };
+
+    try {
+        await userData.findOneAndUpdate(
+            { email: email, "noteList.id": id },
+            { $set: { "noteList.$": noteToStore } }
+        );
+    } catch (e) {
+        console.log("Error in editing new data");
+        return res.status(500).send("Data update failed").end();
+    }
+
+    // return res.status(201).end();
+    console.log("Edit was successful");
+    res.end();
+};
+
+const removeNote = async (req: any, res: any) => {
+    const id = req?.params?.noteId;
+
+    const email = getUserEmail(req);
+    console.log("Email i got it ", email);
+    try {
+        await userData.findOneAndUpdate(
+            { email },
+            { $pull: { noteList: { id } } },
+            { new: true }
+        );
+    } catch (e) {
+        return res.status(500).end();
+    }
+
+    console.log("Removed Successfully");
+    res.status(204).end();
+};
+
+export const insertNote = async (req: any, res: any) => {
+    const { id, title, note, color, dateCreated = "", dateModified = "" } = req.body;
+
+    const email = getUserEmail(req);
+
+    const noteToStore: INote = { id, title, note, color, dateCreated, dateModified };
+
+    try {
+        await userData.findOneAndUpdate(
+            { email: email },
+            { $push: { noteList: noteToStore } },
+            { new: true }
+        );
+    } catch (e: any) {
+        console.log("Error in pushing new data", e.message);
+        return res.status(500).send("Data inserstion failed").end();
+    }
+
+    console.log("Added Successfully");
+    return res.status(201).end();
+};
+
+const healthCheck = (req: MyRequest, res: any) => {
+    res.send("I am ok, how are you?");
+    res.end();
+};
+
+export default {
+    populateWithNotes,
+    getNotes,
+    editNote,
+    removeNote,
+    insertNote,
+    healthCheck,
 };
