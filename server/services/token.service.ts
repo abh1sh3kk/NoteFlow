@@ -1,6 +1,19 @@
 import jwt from "jsonwebtoken";
-import { generateTokens } from "../routes/user.route";
 import { MyRequest } from "../middlewares/auth";
+
+export const generateTokens = (payload: any) => {
+    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_KEY!, {
+        algorithm: "HS256",
+        // until I find a way to handle the error when jwt expires
+        expiresIn: "1y",
+    });
+
+    const refreshToken: string = jwt.sign(payload, process.env.REFRESH_TOKEN_KEY!, {
+        expiresIn: "1y",
+    });
+
+    return { accessToken, refreshToken };
+};
 
 export const getPayloadFromToken = (access_token: string) => {
     const decodedJWT: any = jwt.decode(access_token) || {};
