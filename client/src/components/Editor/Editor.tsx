@@ -9,7 +9,6 @@ function Editor({
     mode,
     noteDetails: { id, title, note, color, dateCreated, dateModified },
 }) {
-
     const [selectedColor, setSelectedColor] = useState(color || "#fff6c7");
 
     const handleColorChange = (color: string) => {
@@ -48,7 +47,7 @@ function Editor({
         if (mode === "create") {
             addNote(theTitle, theNote, color);
         } else if (mode === "edit") {
-            editNote(id, theTitle, theNote, selectedColor, dateCreated, dateModified);
+            editNote(id, theTitle, theNote, selectedColor, dateCreated);
         } else {
             throw new Error("Invalid mode value.");
         }

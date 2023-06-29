@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { ImGoogle, ImGoogle3 } from "react-icons/im";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+// @ts-ignore
 import signinImg from "../../assets/signin.svg";
 import Navbar from "../../components/Navbar/Navbar";
 

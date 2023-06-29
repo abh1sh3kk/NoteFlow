@@ -15,7 +15,7 @@ export const generateTokens = (payload: any) => {
     return { accessToken, refreshToken };
 };
 
-export const getPayloadFromToken = (access_token: String) => {
+export const getPayloadFromToken = (access_token: string) => {
     const decodedJWT: any = jwt.decode(access_token) || {};
     // const decodedJWT: string | jwt.JwtPayload = jwt.decode(access_token) || {};
     return decodedJWT;
