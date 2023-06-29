@@ -11,13 +11,16 @@ export default function NoteView({ handleNoteClick, searchText }) {
     const [sortedNotes, setSortedNotes] = useState(filteredNotes);
 
     useEffect(() => {
-        setFilteredNotes(noteData.filter((note: any) => note.title.startsWith(searchText)));
+        setFilteredNotes(
+            noteData.filter((note: any) =>
+                note.title.toLowerCase().includes(searchText.toLowerCase())
+            )
+        );
     }, [searchText, noteData]);
 
     useEffect(() => {
         setSortedNotes(sortById([...filteredNotes], 1));
     }, [filteredNotes]);
-
 
     const noteList = sortedNotes.map((note: NoteInterface) => {
         return (
