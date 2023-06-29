@@ -1,12 +1,6 @@
-import express from "express";
-import userData from "../models/user.model";
-import { MyRequest } from "../middlewares/auth";
-import { config } from "dotenv";
 import { getUserEmail } from "..";
-import cookieParser from "cookie-parser";
-config();
-const router = express.Router();
-router.use(cookieParser());
+import { MyRequest } from "../middlewares/auth";
+import userData from "../models/user.model";
 
 export const populateWithNotes = async (req: MyRequest, res: any) => {
     const email: string = getUserEmail(req);
