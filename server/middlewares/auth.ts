@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, NextFunction } from "express";
+import { getAccessToken, getPayloadFromToken } from "../services/token.service";
 
 export interface MyRequest extends Request {
     body: {
@@ -8,15 +9,7 @@ export interface MyRequest extends Request {
 }
 
 export function authenticateUser(req: MyRequest, res: any, next: NextFunction) {
-    const { email, password } = req.body;
-    console.log(req.body);
-
-    const validateCredentials = (email: string, password: string) => {
-        console.log(email, password);
-        return true;
-    };
-
-    const isValidatedUser = validateCredentials(email, password);
-
+    const accessToken: String = getAccessToken(req);
+    if (accessToken === "") return res.status(401).end();
     next();
 }
