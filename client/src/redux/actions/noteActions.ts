@@ -1,13 +1,13 @@
+import { INote } from "../../interfaces/interfaces";
 import { getFormattedDate } from "../../utilities/date";
 import { store } from "../store";
 import { fetchUser } from "./userActions";
 import { v4 as uuidv4 } from "uuid";
 
 export async function addNote(title: string, note: string, color: string) {
+    const id: string = uuidv4();
     const dateCreated: String = getFormattedDate();
     const dateModified: String = "";
-    const id = uuidv4();
-    //add try fetch block here ..
     try {
         const res = await fetch("http://localhost:3000/notes", {
             credentials: "include",
@@ -25,30 +25,28 @@ export async function addNote(title: string, note: string, color: string) {
             }),
         });
 
-        if (!res.ok) {
-            console.log("Add failed, store should not be updated. Return the function right now.");
-            alert(
-                "Sorry, the note couldn't be added. Either you didn't pay the internet bill or I did a mistake"
-            );
+        if (res.ok) {
+            store.dispatch({
+                type: "ADD_NOTE",
+                payload: {
+                    id,
+                    title,
+                    note,
+                    color,
+                    dateCreated,
+                    dateModified,
+                },
+            });
             return;
         }
     } catch (e) {
         console.log("Oh no, I didn't expect this. Error in sending note.");
     }
-    store.dispatch({
-        type: "ADD_NOTE",
-        payload: {
-            id,
-            title,
-            note,
-            color,
-            dateCreated,
-            dateModified,
-        },
-    });
+    alert("Couldn't add note.");
+    return;
 }
 
-export async function removeNote(id: String | Number) {
+export async function removeNote(id: string | Number) {
     try {
         const res = await fetch(`http://localhost:3000/notes/${id}`, {
             credentials: "include",
@@ -77,7 +75,8 @@ export async function removeNote(id: String | Number) {
 export async function fetchNotes() {
     try {
         const res = await fetch("http://localhost:3000/notes", { credentials: "include" });
-        const data = await res.json();
+        const data: INote[] = await res.json();
+        console.log("Data I got is ", data);
         store.dispatch({
             type: "FETCH_SUCCESS",
             payload: {
@@ -95,26 +94,49 @@ export async function fetchNotes() {
     }
 }
 
-export function editNote(
-    id: number,
+export async function editNote(
+    id: string,
     title: String,
     note: String,
     color: String,
     dateCreated: String
 ) {
-    const newDateModified = getFormattedDate();
-    // edit in db, if failed don't edit
-    store.dispatch({
-        type: "EDIT_NOTE",
-        payload: {
-            id,
-            title,
-            note,
-            color,
-            dateCreated,
-            dateModified: newDateModified,
-        },
-    });
+    const dateModified = getFormattedDate();
+    try {
+        const res = await fetch("http://localhost:3000/notes", {
+            credentials: "include",
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id,
+                title,
+                note,
+                color,
+                dateCreated,
+                dateModified,
+            }),
+        });
+
+        if (res.ok) {
+            store.dispatch({
+                type: "EDIT_NOTE",
+                payload: {
+                    id,
+                    title,
+                    note,
+                    color,
+                    dateCreated,
+                    dateModified,
+                },
+            });
+            return;
+        }
+    } catch (e) {
+        console.log("Oh no, I didn't expect this. Error in sending note.");
+    }
+    alert("Couldn't be edited. Sorry.");
 }
 
 export function fetchUserData() {
