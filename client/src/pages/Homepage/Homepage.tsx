@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from "react";
-import Note from "../../components/Note/Note";
 import { AiOutlinePlus } from "react-icons/ai";
 import { CiSearch } from "react-icons/ci";
 import { useSelector } from "react-redux";
-import { NoteInterface } from "../../interfaces/interfaces";
-import { sortById } from "./../../utilities/others";
 import Editor from "../../components/Editor/Editor";
 import Navbar from "../../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import { fetchNotes } from "../../redux/actions/noteActions";
 import { fetchUser } from "../../redux/actions/userActions";
-import { store } from "../../redux/store";
 import NoteView from "../NoteView/NoteView";
 
 function Homepage() {
     const navigate = useNavigate();
     fetchUser();
+
     const username: string = useSelector((state: any) => state.userName);
     const noteData = useSelector((state: any) => state.notes);
 
@@ -30,19 +27,19 @@ function Homepage() {
     }, [username]);
 
     // -------------------- Struggle to open editor ---------------------
-    let [mode, setMode] = useState("create");
+    // const MODE : "create" | "edit" = "create";
+    let [mode, setMode] = useState<"create" | "edit">("create");
 
     const [noteDetailsForEditor, setNoteDetailsForEditor] = useState({
         id: "",
         title: "",
         note: "",
-        color: "#fff6c7",
+        color: "#FFF6C7",
         dateCreated: "",
         dateModified: "",
     });
 
     const handleNoteClick = ({ id, title, note, color, dateCreated, dateModified }) => {
-        // mode = "edit";
         setMode("edit");
         setNoteDetailsForEditor({
             id,
@@ -56,6 +53,7 @@ function Homepage() {
     };
 
     const handleCreateNote = () => {
+        setMode("create")
         showPopup();
     };
 
@@ -68,10 +66,10 @@ function Homepage() {
     const hidePopup = () => {
         setModalOpen(false);
         setNoteDetailsForEditor({
-            id: "1",
+            id: "",
             title: "Title",
             note: "",
-            color: "#fff6c7",
+            color: "#FFF6C7",
             dateCreated: "",
             dateModified: "",
         });

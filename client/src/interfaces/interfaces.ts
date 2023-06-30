@@ -3,8 +3,8 @@ export interface LoginType {
 }
 
 
-export interface NoteInterface {
-    id: Number;
+export interface INote {
+    id: string;
     title: String;
     note: String;
     color: String;

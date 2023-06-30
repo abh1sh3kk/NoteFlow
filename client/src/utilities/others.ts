@@ -1,4 +1,4 @@
-import { NoteInterface } from "../interfaces/interfaces";
+import { INote } from "../interfaces/interfaces";
 
 export const sortById = (array: any, flag: 1 | -1) => {
     if (flag === 1) {
@@ -8,6 +8,6 @@ export const sortById = (array: any, flag: 1 | -1) => {
     }
 };
 
-export const findIndexFromId = (state: NoteInterface[], givenId: number) => {
+export const findIndexFromId = (state: INote[], givenId: string) => {
     return state.findIndex((currentNote) => currentNote.id === givenId);
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Note from "../../components/Note/Note";
-import { NoteInterface } from "../../interfaces/interfaces";
+import { INote } from "../../interfaces/interfaces";
 import { sortById } from "../../utilities/others";
 import { useSelector } from "react-redux";
 
@@ -22,11 +22,12 @@ export default function NoteView({ handleNoteClick, searchText }) {
         setSortedNotes(sortById([...filteredNotes], 1));
     }, [filteredNotes]);
 
-    const noteList = sortedNotes.map((note: NoteInterface) => {
+    const noteList = sortedNotes.map((note: INote) => {
+        console.log("key is ", note.id)
         return (
             <Note
                 id={note.id}
-                key={note.id.toString()}
+                key={note.id}
                 title={note.title}
                 note={note.note}
                 dateCreated={note.dateCreated}

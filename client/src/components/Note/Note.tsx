@@ -11,7 +11,7 @@ function Note({ id, title, note, color, dateCreated, dateModified, handleNoteCli
         removeNote(id);
     };
 
-    const handleClick = () => {
+    const handleNoteEdit = () => {
         handleNoteClick({ id, title, note, color, dateCreated, dateModified });
     };
 
@@ -29,7 +29,7 @@ function Note({ id, title, note, color, dateCreated, dateModified, handleNoteCli
             >
                 <div className="note-upper flex flex-col gap-4">
                     <h2 className="text-lg line-clamp-1">{title}</h2>
-                    <p onClick={handleClick} className="line-clamp-4">
+                    <p  className="line-clamp-4">
                         {note}
                     </p>
                 </div>
@@ -38,7 +38,7 @@ function Note({ id, title, note, color, dateCreated, dateModified, handleNoteCli
                     <div className="note__icons-left flex gap-4 text-base">
                         {isPinned ? <BsPinAngleFill /> : <BsPinAngle />}
                         <MdOutlineControlPointDuplicate onClick={handleDuplicateNote} />
-                        <FiEdit />
+                        <FiEdit onClick={handleNoteEdit} />
 
                         {/* <GoDuplicate /> */}
                     </div>

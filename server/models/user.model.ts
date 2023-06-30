@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
 export interface INote {
-    id: Number | String;
+    id: String | Number;
     title: String;
     note: String;
     color: String;
