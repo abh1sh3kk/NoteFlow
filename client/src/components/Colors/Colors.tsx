@@ -2,12 +2,12 @@ import React, { useState } from "react";
 
 function Colors({ selectedColor, handleColorChange }) {
     const colors = ["#FFF6C7", "#DED9FF", "#DDFFE9", "#FFD9EB", "#D9E8FF"];
-
     colors.includes(selectedColor.toUpperCase()) || colors.push(selectedColor.toUpperCase());
 
+
+    console.log("color changed to ", selectedColor);
     const activateThisColor = (e: any) => {
         handleColorChange(e.target.getAttribute("data-color"));
-        // selectColor("#FFF6C7") ;
     };
 
     function removeDuplicates(arr: String[]) {

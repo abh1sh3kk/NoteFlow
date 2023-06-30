@@ -9,8 +9,9 @@ function Editor({
     mode,
     noteDetails: { id, title, note, color, dateCreated, dateModified },
 }) {
-    const [selectedColor, setSelectedColor] = useState(color || "#fff6c7");
-
+    //color
+    const DEFAULT_COLOR = "#FFF6C7";
+    const [selectedColor, setSelectedColor] = useState(color || DEFAULT_COLOR);
     const handleColorChange = (color: string) => {
         setSelectedColor(color);
     };
@@ -45,7 +46,7 @@ function Editor({
         e.preventDefault();
 
         if (mode === "create") {
-            addNote(theTitle, theNote, color);
+            addNote(theTitle, theNote, selectedColor);
         } else if (mode === "edit") {
             editNote(id, theTitle, theNote, selectedColor, dateCreated);
         } else {
