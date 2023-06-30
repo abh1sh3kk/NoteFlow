@@ -23,7 +23,6 @@ export default function NoteView({ handleNoteClick, searchText }) {
     }, [filteredNotes]);
 
     const noteList = sortedNotes.map((note: INote) => {
-        console.log("key is ", note.id)
         return (
             <Note
                 id={note.id}
