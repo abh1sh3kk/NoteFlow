@@ -25,7 +25,7 @@ function Login() {
             try {
                 // @ts-ignore
                 const backendLink = import.meta.env.VITE_BACKEND_API;
-                const res = await fetch(`${backendLink}/noteflow.onrender.com/users/signin`, {
+                const res = await fetch(`${backendLink}/users/signin`, {
                     credentials: "include",
                     method: "POST",
                     headers: {
