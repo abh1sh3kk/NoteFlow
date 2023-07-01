@@ -4,8 +4,16 @@ import bcrypt from "bcrypt";
 import { generateTokens } from "../services/token.service";
 import { getUserEmail } from "..";
 
-const signout = (req: MyRequest, res: any) => {
-    // res.clearCookie("accesstoken");
+const signout = async (req: MyRequest, res: any) => {
+    const email = getUserEmail(req);
+    const refreshToken = JSON.parse(req.cookies.tokens).refreshToken;
+
+    await userData.findOneAndUpdate(
+        { email },
+        { $pull: { sessions: refreshToken } },
+        { new: true }
+    );
+
     res.clearCookie("tokens");
     console.log("Cookies has been cleared.");
     return res.status(204).end();
