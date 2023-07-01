@@ -13,7 +13,6 @@
     "@reduxjs/toolkit": "^1.9.5",
     "@types/react-redux": "^7.1.25",
     "hex-to-hsl": "^1.0.2",
-    "hsl-to-hex": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.9.0",
