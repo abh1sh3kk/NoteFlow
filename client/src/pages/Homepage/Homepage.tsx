@@ -27,7 +27,6 @@ function Homepage() {
     }, [username]);
 
     // -------------------- Struggle to open editor ---------------------
-    // const MODE : "create" | "edit" = "create";
     let [mode, setMode] = useState<"create" | "edit">("create");
 
     const [noteDetailsForEditor, setNoteDetailsForEditor] = useState({

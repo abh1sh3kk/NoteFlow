@@ -94,7 +94,7 @@ function Login() {
                             >
                                 {/* <ImGoogle3 /> */}
                                 <FcGoogle className="text-xl" />
-                                <span>Sign In with Google</span>
+                                <a href="https://pbs.twimg.com/tweet_video_thumb/FDp4p4pWQAA37b3.jpg">Sign In with Google</a>
                             </button>
                             <div className="text-center">
                                 <span className="text-slate-600">Don't have an account?</span>{" "}
