@@ -19,7 +19,9 @@ function Navbar() {
     }, [username]);
 
     const handleLogout = () => {
-        fetch("http://localhost:3000/users/signout", { credentials: "include" }).then(() => {
+        // @ts-ignore
+        const backendLink = import.meta.env.VITE_BACKEND_API;
+        fetch(`${backendLink}/users/signout`, { credentials: "include" }).then(() => {
             store.dispatch({
                 type: "REMOVE_USER",
             });
@@ -32,14 +34,18 @@ function Navbar() {
         try {
             if (!userExists) return;
 
-            await fetch("http://localhost:3000/notes/populate", { credentials: "include" });
+            // @ts-ignore
+            const backendLink = import.meta.env.VITE_BACKEND_API;
+            await fetch(`${backendLink}/notes/populate`, { credentials: "include" });
             fetchNotes();
         } catch (e) {
             console.log("Error in populating because ", e.message);
         }
     };
     const handleLogIn = async () => {
-        await fetch("http://localhost:3000/users/signin", { credentials: "include" });
+        // @ts-ignore
+        const backendLink = import.meta.env.VITE_BACKEND_API;
+        await fetch(`${backendLink}/users/signin`, { credentials: "include" });
     };
 
     return (

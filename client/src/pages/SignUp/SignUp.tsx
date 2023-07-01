@@ -26,7 +26,9 @@ function SignUp() {
     const handleSignUp = (e: any) => {
         e.preventDefault();
 
-        fetch("http://localhost:3000/users/signup", {
+        // @ts-ignore
+        const backendLink = import.meta.env.VITE_BACKEND_API;
+        fetch(`${backendLink}/users/signup`, {
             method: "POST",
             credentials: "include",
             headers: {

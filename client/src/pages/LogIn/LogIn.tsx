@@ -23,7 +23,9 @@ function Login() {
         e.preventDefault();
         const submitFormData = async () => {
             try {
-                const res = await fetch("http://localhost:3000/users/signin", {
+                // @ts-ignore
+                const backendLink = import.meta.env.VITE_BACKEND_API;
+                const res = await fetch(`${backendLink}/noteflow.onrender.com/users/signin`, {
                     credentials: "include",
                     method: "POST",
                     headers: {
@@ -94,7 +96,9 @@ function Login() {
                             >
                                 {/* <ImGoogle3 /> */}
                                 <FcGoogle className="text-xl" />
-                                <a href="https://pbs.twimg.com/tweet_video_thumb/FDp4p4pWQAA37b3.jpg">Sign In with Google</a>
+                                <a href="https://pbs.twimg.com/tweet_video_thumb/FDp4p4pWQAA37b3.jpg">
+                                    Sign In with Google
+                                </a>
                             </button>
                             <div className="text-center">
                                 <span className="text-slate-600">Don't have an account?</span>{" "}

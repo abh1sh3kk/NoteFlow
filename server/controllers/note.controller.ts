@@ -166,6 +166,7 @@ export const insertNote = async (req: any, res: any) => {
 };
 
 const healthCheck = (req: MyRequest, res: any) => {
+    console.log("I am slow but I am working")
     res.send("I am ok, how are you?");
     res.end();
 };

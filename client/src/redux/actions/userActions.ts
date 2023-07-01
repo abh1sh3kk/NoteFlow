@@ -7,9 +7,12 @@ export async function fetchUser() {
         return email.split("@")[0];
     };
     try {
-        const res_email = await fetch("http://localhost:3000/users/email", {
+        // @ts-ignore
+        const backendLink = import.meta.env.VITE_BACKEND_API;
+        const res_email = await fetch(`${backendLink}/users/email`, {
             credentials: "include",
         });
+
         const email: string = await res_email.json();
         const username: string = userNameFromEmail(email);
 
@@ -32,8 +35,9 @@ export async function fetchUser() {
 
 export async function removeUser() {
     try {
-        // clearing cookies from client side should work
-        await fetch("http://localhost:3000/users/signout", { credentials: "include" });
+        // @ts-ignore
+        const backendLink = import.meta.env.VITE_BACKEND_API;
+        await fetch(`${backendLink}/users/signout`, { credentials: "include" });
         clearNotes();
     } catch (err) {
         console.log("Error in removing the cookies of a user", err);

@@ -9,7 +9,9 @@ export async function addNote(title: string, note: string, color: string) {
     const dateCreated: String = getFormattedDate();
     const dateModified: String = "";
     try {
-        const res = await fetch("http://localhost:3000/notes", {
+        // @ts-ignore
+        const backendLink = import.meta.env.VITE_BACKEND_API;
+        const res = await fetch(`${backendLink}/notes`, {
             credentials: "include",
             method: "POST",
             headers: {
@@ -48,7 +50,9 @@ export async function addNote(title: string, note: string, color: string) {
 
 export async function removeNote(id: string | Number) {
     try {
-        const res = await fetch(`http://localhost:3000/notes/${id}`, {
+        // @ts-ignore
+        const backendLink = import.meta.env.VITE_BACKEND_API;
+        const res = await fetch(`${backendLink}/notes/${id}`, {
             credentials: "include",
             method: "DELETE",
         });
@@ -74,7 +78,9 @@ export async function removeNote(id: string | Number) {
 
 export async function fetchNotes() {
     try {
-        const res = await fetch("http://localhost:3000/notes", { credentials: "include" });
+        // @ts-ignore
+        const backendLink = import.meta.env.VITE_BACKEND_API;
+        const res = await fetch(`${backendLink}/notes`, { credentials: "include" });
         const data: INote[] = await res.json();
         console.log("Data I got is ", data);
         store.dispatch({
@@ -103,7 +109,9 @@ export async function editNote(
 ) {
     const dateModified = getFormattedDate();
     try {
-        const res = await fetch("http://localhost:3000/notes", {
+        // @ts-ignore
+        const backendLink = import.meta.env.VITE_BACKEND_API;
+        const res = await fetch(`${backendLink}/notes`, {
             credentials: "include",
             method: "PUT",
             headers: {
