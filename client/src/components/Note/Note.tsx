@@ -36,7 +36,7 @@ function Note({ id, title, note, color, dateCreated, dateModified, handleNoteCli
 
                 <div className="note-lower flex justify-between gap-2 w-full">
                     <div className="note__icons-left flex gap-4 text-base">
-                        {isPinned ? <BsPinAngleFill /> : <BsPinAngle />}
+                        {/* {isPinned ? <BsPinAngleFill /> : <BsPinAngle />} */}
                         <MdOutlineControlPointDuplicate onClick={handleDuplicateNote} />
                         <FiEdit onClick={handleNoteEdit} />
 
