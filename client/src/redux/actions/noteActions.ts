@@ -82,7 +82,6 @@ export async function fetchNotes() {
         const backendLink = import.meta.env.VITE_BACKEND_API;
         const res = await fetch(`${backendLink}/notes`, { credentials: "include" });
         const data: INote[] = await res.json();
-        console.log("Data I got is ", data);
         store.dispatch({
             type: "FETCH_SUCCESS",
             payload: {

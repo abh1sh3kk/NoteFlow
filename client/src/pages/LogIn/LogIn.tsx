@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
+import { AiOutlineUser } from "react-icons/ai";
 // @ts-ignore
 import signinImg from "../../assets/signin.svg";
 import Navbar from "../../components/Navbar/Navbar";
@@ -17,6 +17,30 @@ function Login() {
             ...oldData,
             [e.target.name]: e.target.value,
         }));
+    };
+
+    const loginAsAGuest = async (e: any) => {
+        e.preventDefault();
+        try {
+            // @ts-ignore
+            const backendLink = import.meta.env.VITE_BACKEND_API;
+            const res = await fetch(`${backendLink}/users/signin`, {
+                credentials: "include",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email: "guest138@gmail.com", password: "&JKz!z2ZLe9T6d*V" }),
+            });
+
+            if (res.ok) {
+                navigate("/");
+            } else {
+                console.log("Something gone wrong.. cause response is not ok.");
+            }
+        } catch (e) {
+            console.log("Error in signing in.");
+        }
     };
 
     const handleLogin = async (e: any) => {
@@ -95,10 +119,14 @@ function Login() {
                                 className="flex items-center justify-center gap-2 w-full bg-white text-slate-600 py-2 mt-2 rounded-md "
                             >
                                 {/* <ImGoogle3 /> */}
-                                <FcGoogle className="text-xl" />
-                                <a href="https://pbs.twimg.com/tweet_video_thumb/FDp4p4pWQAA37b3.jpg">
-                                    Sign In with Google
-                                </a>
+                                <AiOutlineUser className="text-xl" />
+                                <div
+                                    onClick={(e) => {
+                                        loginAsAGuest(e);
+                                    }}
+                                >
+                                    Continue as guest
+                                </div>
                             </button>
                             <div className="text-center">
                                 <span className="text-slate-600">Don't have an account?</span>{" "}

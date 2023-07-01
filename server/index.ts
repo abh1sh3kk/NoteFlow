@@ -7,17 +7,19 @@ import noteRouter from "./routes/note.route";
 import { config } from "dotenv";
 config();
 import userData from "./models/user.model";
-import {
-    getAccessTokenFromRequest,
-    getPayloadFromToken,
-} from "./services/token.service";
+import { getAccessTokenFromRequest, getPayloadFromToken } from "./services/token.service";
 
 const app = express();
 // ----------------------------------------------
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors({ origin: "https://xd-noteflow.netlify.app", credentials: true }));
+app.use(
+    cors({
+        origin: [ "http://localhost:5173", "https://xd-noteflow.netlify.app"],
+        credentials: true,
+    })
+);
 app.use(cookieParser());
 app.use("/users", userRouter);
 app.use("/notes", noteRouter);
