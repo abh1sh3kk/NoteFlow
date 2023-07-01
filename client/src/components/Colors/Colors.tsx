@@ -1,6 +1,5 @@
 import React, { JSXElementConstructor } from "react";
 import hexToHsl from "hex-to-hsl";
-import hslToHex from "hsl-to-hex";
 
 function Colors({ selectedColor, handleColorChange }) {
     const colors = ["#FFF6C7", "#DED9FF", "#DDFFE9", "#FFD9EB", "#D9E8FF"];

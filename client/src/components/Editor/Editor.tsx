@@ -10,8 +10,9 @@ function Editor({
     noteDetails: { id, title, note, color, dateCreated, dateModified },
 }) {
     //color
-    const DEFAULT_COLOR = "#FFF6C7";
-    const [selectedColor, setSelectedColor] = useState(color || DEFAULT_COLOR);
+    const INITIAL_COLOR = "#FFF6C7";
+    const [selectedColor, setSelectedColor] = useState(color || INITIAL_COLOR);
+    
     const handleColorChange = (color: string) => {
         setSelectedColor(color);
     };
