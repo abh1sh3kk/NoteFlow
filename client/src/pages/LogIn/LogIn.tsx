@@ -45,29 +45,26 @@ function Login() {
 
     const handleLogin = async (e: any) => {
         e.preventDefault();
-        const submitFormData = async () => {
-            try {
-                // @ts-ignore
-                const backendLink = import.meta.env.VITE_BACKEND_API;
-                const res = await fetch(`${backendLink}/users/signin`, {
-                    credentials: "include",
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(loginData),
-                });
+        try {
+            // @ts-ignore
+            const backendLink = import.meta.env.VITE_BACKEND_API;
+            const res = await fetch(`${backendLink}/users/signin`, {
+                credentials: "include",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(loginData),
+            });
 
-                if (res.ok) {
-                    navigate("/");
-                } else {
-                    console.log("Something gone wrong.. cause response is not ok.");
-                }
-            } catch (e) {
-                console.log("Error in signing in.");
+            if (res.ok) {
+                navigate("/");
+            } else {
+                console.log("Something gone wrong.. cause response is not ok.");
             }
-        };
-        submitFormData();
+        } catch (e) {
+            console.log("Error in signing in.");
+        }
     };
 
     return (
