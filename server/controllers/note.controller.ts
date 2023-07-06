@@ -134,7 +134,6 @@ const removeNote = async (req: any, res: any) => {
             { $pull: { noteList: { id } } },
             { new: true }
         );
-        console.log("New data after removing", newData);
     } catch (e) {
         return res.status(500).end();
     }
@@ -166,7 +165,7 @@ export const insertNote = async (req: any, res: any) => {
 };
 
 const healthCheck = (req: MyRequest, res: any) => {
-    console.log("I am slow but I am working")
+    console.log("I am slow but I am working");
     res.send("I am ok, how are you?");
     res.end();
 };

@@ -7,14 +7,12 @@ import Navbar from "../../components/Navbar/Navbar";
 import { fetchUser } from "../../redux/actions/userActions";
 
 function SignUp() {
-    console.log("Signup rerender.");
     const navigate = useNavigate();
     fetchUser();
     const username: string = useSelector((state: any) => state.userName);
 
     useEffect(() => {
         if (username !== "") navigate("/");
-        console.log("Username changed and new username is", username);
     }, [username]);
 
     const [formData, setFormData] = useState({

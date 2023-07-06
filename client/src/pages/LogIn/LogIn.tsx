@@ -25,9 +25,6 @@ function Login() {
     };
 
     const submitLoginData = async (loginData) => {
-        console.log("I am submitLoginData");
-        console.log(loginData);
-        console.log(JSON.stringify(loginData));
         try {
             // @ts-ignore
             const backendLink = import.meta.env.VITE_BACKEND_API;
