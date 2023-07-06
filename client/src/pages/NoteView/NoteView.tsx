@@ -3,6 +3,8 @@ import Note from "../../components/Note/Note";
 import { INote } from "../../interfaces/interfaces";
 import { sortById } from "../../utilities/others";
 import { useSelector } from "react-redux";
+// @ts-ignore
+import NotesNotFound from "../../assets/emptynotes.svg";
 
 export default function NoteView({ handleNoteClick, searchText }) {
     const noteData = useSelector((state: any) => state.notes);
@@ -40,7 +42,14 @@ export default function NoteView({ handleNoteClick, searchText }) {
     return (
         <>
             {noteList.length === 0 ? (
-                <div>No results found</div>
+                <section className="flex flex-col justify-center h-full items-center w-full ">
+                    <figure>
+                        <img src={NotesNotFound} className="mt-14 w-40 sm:w-50" alt="" />
+                    </figure>
+                    <article className="text-slate-500 text-base sm:text-lg mt-2">
+                        No results found.
+                    </article>
+                </section>
             ) : (
                 <div className="note-container content-center grid gap-4 grid-cols-[repeat(auto-fill,minmax(296px,1fr))]">
                     {noteList}

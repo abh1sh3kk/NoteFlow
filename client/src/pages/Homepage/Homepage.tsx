@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchNotes } from "../../redux/actions/noteActions";
 import { fetchUser } from "../../redux/actions/userActions";
 import NoteView from "../NoteView/NoteView";
+import EmptyPage from "../EmptyPage/EmptyPage";
 
 function Homepage() {
     const navigate = useNavigate();
@@ -52,7 +53,7 @@ function Homepage() {
     };
 
     const handleCreateNote = () => {
-        setMode("create")
+        setMode("create");
         showPopup();
     };
 
@@ -100,7 +101,7 @@ function Homepage() {
                         </div>
                     </div>
                     {noteData.length === 0 ? (
-                        <div>Your notes are empty. Create new?</div>
+                        <EmptyPage />
                     ) : (
                         <NoteView handleNoteClick={handleNoteClick} searchText={searchText} />
                     )}
