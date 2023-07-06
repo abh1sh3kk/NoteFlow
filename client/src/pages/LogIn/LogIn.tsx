@@ -20,31 +20,14 @@ function Login() {
     };
 
     const loginAsAGuest = async (e: any) => {
-        e.preventDefault();
-        try {
-            // @ts-ignore
-            const backendLink = import.meta.env.VITE_BACKEND_API;
-            const res = await fetch(`${backendLink}/users/signin`, {
-                credentials: "include",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email: "guest138@gmail.com", password: "&JKz!z2ZLe9T6d*V" }),
-            });
-
-            if (res.ok) {
-                navigate("/");
-            } else {
-                console.log("Something gone wrong.. cause response is not ok.");
-            }
-        } catch (e) {
-            console.log("Error in signing in.");
-        }
+        setLoginData({ email: "guest138@gmail.com", password: "&JKz!z2ZLe9T6d*V" });
+        submitLoginData(loginData);
     };
 
-    const handleLogin = async (e: any) => {
-        e.preventDefault();
+    const submitLoginData = async (loginData) => {
+        console.log("I am submitLoginData");
+        console.log(loginData);
+        console.log(JSON.stringify(loginData));
         try {
             // @ts-ignore
             const backendLink = import.meta.env.VITE_BACKEND_API;
@@ -65,6 +48,11 @@ function Login() {
         } catch (e) {
             console.log("Error in signing in.");
         }
+    };
+
+    const handleLogin = async (e: any) => {
+        e.preventDefault();
+        submitLoginData(loginData);
     };
 
     return (
@@ -119,7 +107,13 @@ function Login() {
                                 <AiOutlineUser className="text-xl" />
                                 <div
                                     onClick={(e) => {
-                                        loginAsAGuest(e);
+                                        e.preventDefault();
+                                        const updatedLoginData = {
+                                            email: "guest138@gmail.com",
+                                            password: "&JKz!z2ZLe9T6d*V",
+                                        };
+                                        setLoginData(updatedLoginData);
+                                        submitLoginData(updatedLoginData);
                                     }}
                                 >
                                     Continue as guest
