@@ -58,7 +58,7 @@ function Editor({
     };
 
     return (
-        <main className="min-h-screen min-w-full bg-black bg-opacity-40 text-white absolute scroll-m-8 top-0 left-0 flex justify-center items-center">
+        <main className="min-h-screen min-w-full bg-black bg-opacity-40 text-white fixed scroll-m-8 top-0 left-0 flex justify-center items-center">
             {/* Popup area */}
             <div className="lg:my-4 lg:rounded-md w-full bg-texture bg-white bg-fixed bg-cover flex sm:pt-10 max-w-[850px] justify-center items-center p-4 relative">
                 <button
