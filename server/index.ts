@@ -13,7 +13,6 @@ import { limiter } from "./configs/ratelimit";
 const app = express();
 // ----------------------------------------------
 
-app.use("/notes", limiter);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
@@ -22,6 +21,7 @@ app.use(
         credentials: true,
     })
 );
+app.use("/notes", limiter);
 app.use(cookieParser());
 app.use("/users", userRouter);
 app.use("/notes", noteRouter);
