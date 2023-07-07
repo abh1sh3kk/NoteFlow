@@ -27,9 +27,7 @@ function Login() {
     const submitLoginData = async (loginData) => {
         try {
             // @ts-ignore
-            const backendLink = "https://noteflow.onrender.com";
-            // @ts-ignore
-            // const backendLink = import.meta.env.VITE_BACKEND_API;
+            const backendLink = import.meta.env.VITE_BACKEND_API;
             const res = await fetch(`${backendLink}/users/signin`, {
                 credentials: "include",
                 method: "POST",

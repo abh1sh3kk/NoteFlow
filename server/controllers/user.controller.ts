@@ -14,8 +14,11 @@ const signout = async (req: MyRequest, res: any) => {
         { new: true }
     );
 
-    res.clearCookie("tokens");
-    console.log("Cookies has been cleared.");
+    res.clearCookie("tokens", {
+        sameSite: "None",
+        secure: true,
+    });
+    console.log("Cookies should be cleared.");
     return res.status(204).end();
 };
 
@@ -133,7 +136,15 @@ const signOutFromAllSessions = async (req: MyRequest, res: any) => {
     } catch (e) {
         console.log("Failed to signout from all sessions");
     }
-    res.clearCookie("token").status(204).end();
+    res.clearCookie(
+        "token",
+        res.clearCookie("tokens", {
+            sameSite: "None",
+            secure: true,
+        })
+    )
+        .status(204)
+        .end();
 };
 
 const getEmail = (req: MyRequest, res: any) => {
