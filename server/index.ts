@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
     cors({
-        origin: [ "http://localhost:5173", "https://xd-noteflow.netlify.app"],
+        origin: [ "https://xd-noteflow.netlify.app", "http://localhost:5173"],
         credentials: true,
     })
 );

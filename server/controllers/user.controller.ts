@@ -50,7 +50,14 @@ const signin = async (req: MyRequest, res: any) => {
     console.log("sign in with post successful");
     return res
         .status(201)
-        .cookie("tokens", JSON.stringify({ accessToken: accessToken, refreshToken: refreshToken }))
+        .cookie(
+            "tokens",
+            JSON.stringify({ accessToken: accessToken, refreshToken: refreshToken }),
+            {
+                sameSite: "None",
+                secure: true,
+            }
+        )
         .end();
 };
 
@@ -108,7 +115,14 @@ const signup = async (req: MyRequest, res: any) => {
 
     return res
         .status(201)
-        .cookie("tokens", JSON.stringify({ accessToken: accessToken, refreshToken: refreshToken }))
+        .cookie(
+            "tokens",
+            JSON.stringify({ accessToken: accessToken, refreshToken: refreshToken }),
+            {
+                sameSite: "None",
+                secure: true,
+            }
+        )
         .end();
 };
 
