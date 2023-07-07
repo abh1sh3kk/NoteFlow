@@ -8,15 +8,17 @@ import { config } from "dotenv";
 config();
 import userData from "./models/user.model";
 import { getAccessTokenFromRequest, getPayloadFromToken } from "./services/token.service";
+import { limiter } from "./configs/ratelimit";
 
 const app = express();
 // ----------------------------------------------
 
+app.use("/notes", limiter);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
     cors({
-        origin: [ "https://xd-noteflow.netlify.app", "http://localhost:5173"],
+        origin: ["https://xd-noteflow.netlify.app", "http://localhost:5173"],
         credentials: true,
     })
 );
