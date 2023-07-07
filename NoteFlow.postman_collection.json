@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"abhishekacharya175@gmail.com\",\r\n    \"password\": \"password\"\r\n}",
+							"raw": "{\r\n    \"email\": \"abhishek1@gmail.com\",\r\n    \"password\": \"abhishek\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -41,7 +41,17 @@
 					"name": "Get Email",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "{{api}}/users/email",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"email"
+							]
+						}
 					},
 					"response": []
 				},
@@ -52,7 +62,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"abhishekacharya180@gmail.com\", \r\n    \"password\": \"password\"\r\n}\r\n",
+							"raw": "{\r\n    \"email\": \"abhishek1@gmail.com\",\r\n    \"password\": \"abhishek\",\r\n    \"confirmPassword\": \"abhishek\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -92,7 +102,37 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/users/signout",
+							"raw": "{{api-link}}/users/signout",
+							"host": [
+								"{{api-link}}"
+							],
+							"path": [
+								"users",
+								"signout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SignOut From All Sessions",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"abhishekacharya180@gmail.com\", \r\n    \"password\": \"password\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/signoutAll",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -100,7 +140,7 @@
 							"port": "3000",
 							"path": [
 								"users",
-								"signout"
+								"signoutAll"
 							]
 						}
 					},
@@ -129,12 +169,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/notes",
-							"protocol": "http",
+							"raw": "{{api-link}}/notes",
 							"host": [
-								"localhost"
+								"{{api-link}}"
 							],
-							"port": "3000",
 							"path": [
 								"notes"
 							]
@@ -149,7 +187,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"abhishekacharya180@gmail.com\", \r\n    \"password\": \"password\"\r\n}\r\n",
+							"raw": "{\r\n    \"id\": \"3\",\r\n    \"title\": \"I am a new title\",\r\n    \"note\": \"I am a new note\",\r\n    \"color\": \"#ffffff\",\r\n    \"dateCreated\": \"Created Date\",\r\n    \"dateModified\": \"Modified data\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -188,12 +226,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/notes/populate",
-							"protocol": "http",
+							"raw": "{{api-link}}/notes/populate",
 							"host": [
-								"localhost"
+								"{{api-link}}"
 							],
-							"port": "3000",
 							"path": [
 								"notes",
 								"populate"
@@ -209,7 +245,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"abhishekacharya180@gmail.com\", \r\n    \"password\": \"password\"\r\n}\r\n",
+							"raw": "{\r\n    \"id\": \"abhishek-dkfj;a;sdfd982ds0\",\r\n    \"title\": \"I am a new title\",\r\n    \"note\": \"I am a new note\",\r\n    \"color\": \"#ffffff\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -269,7 +305,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"abhishekacharya180@gmail.com\", \r\n    \"password\": \"password\"\r\n}\r\n",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -277,20 +313,48 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/notes",
+							"raw": "http://localhost:3000/notes/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"notes"
+								"notes",
+								"2"
 							]
 						}
 					},
 					"response": []
 				}
 			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "api-link",
+			"value": "https://noteflow.onrender.com/notes/health",
+			"type": "default"
 		}
 	]
 }
