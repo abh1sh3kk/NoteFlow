@@ -84,7 +84,6 @@ function Login() {
                 navigate("/");
             } else if (res.status === 404) {
                 showErrorMsg("Sorry, the email doesn't exist.");
-                setLoginData({ email: "", password: "" });
             } else if (res.status === 401) {
                 showErrorMsg("Incorrect password.");
                 setLoginData((data) => ({ ...data, password: "" }));

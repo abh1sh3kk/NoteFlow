@@ -96,7 +96,7 @@ const populateWithNotes = async (req: MyRequest, res: any) => {
 };
 
 const getNotes = async (req: any, res: any) => {
-    let notes: INote[] = [];
+    let notes: INote[] | null = [];
 
     const email = getUserEmail(req);
     notes = await getNoteFromEmail(email);

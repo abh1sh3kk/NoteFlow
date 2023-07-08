@@ -8,7 +8,6 @@ import NotesNotFound from "../../assets/emptynotes.svg";
 
 export default function NoteView({ handleNoteClick, searchText }) {
     const noteData = useSelector((state: any) => state.notes);
-
     const [filteredNotes, setFilteredNotes] = useState(noteData);
     const [sortedNotes, setSortedNotes] = useState(filteredNotes);
 
