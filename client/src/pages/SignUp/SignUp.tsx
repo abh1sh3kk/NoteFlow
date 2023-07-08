@@ -5,11 +5,31 @@ import signupImg from "../../assets/signup2.svg";
 import { useSelector } from "react-redux";
 import Navbar from "../../components/Navbar/Navbar";
 import { fetchUser } from "../../redux/actions/userActions";
+import { z } from "zod";
+import { RxCross1 } from "react-icons/rx";
+
+const SignupSchema = z
+    .object({
+        email: z.coerce.string().email({ message: "Please enter a valid email address." }),
+        password: z.coerce
+            .string()
+            .min(6, { message: "Minimum 6 characters are required for password." })
+            .max(16, { message: "Sorry, you can't enter more than 16 characters." }),
+        confirmPassword: z.coerce
+            .string()
+            .min(6, { message: "Minimum 6 characters are required." })
+            .max(16, { message: "Sorry, you can't enter more than 16 characters." }),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+        message: "Sorry the passwords do not match.",
+        path: ["confirmPassword"],
+    });
 
 function SignUp() {
     const navigate = useNavigate();
     fetchUser();
     const username: string = useSelector((state: any) => state.userName);
+    const [errorMsg, setErrorMsg] = useState<string>("");
 
     useEffect(() => {
         if (username !== "") navigate("/");
@@ -20,34 +40,56 @@ function SignUp() {
         password: "",
         confirmPassword: "",
     });
+    let parsedData: z.SafeParseReturnType<
+        {
+            email: string;
+            password: string;
+            confirmPassword: string;
+        },
+        | {
+              email: string;
+              password: string;
+              confirmPassword: string;
+          }
+        | undefined
+    >;
+
+    useEffect(() => {
+        parsedData = SignupSchema.safeParse(formData);
+    }, [formData]);
 
     const handleInputChange = (e: any) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSignUp = (e: any) => {
+    const handleSignUp = async (e: any) => {
         e.preventDefault();
 
-        // @ts-ignore
-        const backendLink = import.meta.env.VITE_BACKEND_API;
-        fetch(`${backendLink}/users/signup`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    navigate("/");
-                } else if (response.status === 409) {
-                    alert("Sorry the email already exists.");
-                }
-            })
-            .catch((e) => {
-                console.log("Sign up failed and the reason is ", e);
+        if (!parsedData?.success) {
+            console.log("Zod says something's wrong");
+            setErrorMsg(JSON.parse(parsedData?.error?.message)[0].message);
+            return;
+        }
+
+        try {
+            // @ts-ignore
+            const backendLink = import.meta.env.VITE_BACKEND_API;
+            const res = await fetch(`${backendLink}/users/signup`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
             });
+            if (res.ok) {
+                navigate("/");
+            } else if (res.status === 409) {
+                setErrorMsg("Sorry the email already exists.");
+            }
+        } catch (error) {
+            console.log("Sign up failed and the reason is ", e);
+        }
     };
 
     return (
@@ -88,6 +130,14 @@ function SignUp() {
                                     onChange={handleInputChange}
                                 />
                             </label>
+                            {errorMsg !== "" && (
+                                <p className="text-red-600 flex items-center gap-2">
+                                    <span>
+                                        <RxCross1 className="text-sm" />
+                                    </span>
+                                    <span className="pb-[2px]">{errorMsg}</span>
+                                </p>
+                            )}
                             <button
                                 type="submit"
                                 className="w-full bg-[#7059ff] text-white py-2 mt-2 rounded-md "

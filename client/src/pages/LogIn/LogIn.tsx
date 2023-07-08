@@ -1,16 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineUser } from "react-icons/ai";
+import { z } from "zod";
 // @ts-ignore
 import signinImg from "../../assets/signin.svg";
 import Navbar from "../../components/Navbar/Navbar";
+import { RxCross1 } from "react-icons/rx";
+
+interface ILoginData {
+    email: string;
+    password: string;
+}
+
+const LoginSchema = z.object({
+    email: z.coerce.string().email({ message: "Please enter a valid email address." }),
+    password: z.coerce
+        .string()
+        .min(6, { message: "Minimum 6 characters are required." })
+        .max(16, { message: "Sorry, you can't enter more than 16 characters." }),
+});
 
 function Login() {
     const navigate = useNavigate();
-    const [loginData, setLoginData] = useState({
+    const [errorMsg, setErrorMsg] = useState<String>("");
+    const [loginData, setLoginData] = useState<ILoginData>({
         email: "",
         password: "",
     });
+
+    const showErrorMsg = async (message: string) => {
+        setErrorMsg(message);
+        // setTimeout(() => {
+        //     setErrorMsg("");
+        // }, 4000);
+    };
+
+    let parsedData: z.SafeParseReturnType<
+        {
+            email: string;
+            password: string;
+        },
+        | {
+              email: string;
+              password: string;
+          }
+        | undefined
+    >;
 
     const handleLoginDataChange = (e: any) => {
         setLoginData((oldData) => ({
@@ -19,12 +54,20 @@ function Login() {
         }));
     };
 
+    useEffect(() => {
+        parsedData = LoginSchema.safeParse(loginData);
+    }, [loginData]);
+
     const loginAsAGuest = async (e: any) => {
-        setLoginData({ email: "guest138@gmail.com", password: "&JKz!z2ZLe9T6d*V" });
-        submitLoginData(loginData);
+        e.preventDefault();
+        submitLoginData({ email: "guest138@gmail.com", password: "&JKz!z2ZLe9T6d*V" });
     };
 
-    const submitLoginData = async (loginData) => {
+    const submitLoginData = async (loginData: ILoginData) => {
+        if (!parsedData?.success) {
+            showErrorMsg("Enter a valid password");
+            return;
+        }
         try {
             // @ts-ignore
             const backendLink = import.meta.env.VITE_BACKEND_API;
@@ -39,8 +82,14 @@ function Login() {
 
             if (res.ok) {
                 navigate("/");
+            } else if (res.status === 404) {
+                showErrorMsg("Sorry, the email doesn't exist.");
+                setLoginData({ email: "", password: "" });
+            } else if (res.status === 401) {
+                showErrorMsg("Incorrect password.");
+                setLoginData((data) => ({ ...data, password: "" }));
             } else {
-                console.log("Something gone wrong.. cause response is not ok.");
+                showErrorMsg("Seems like an internal error.");
             }
         } catch (e) {
             console.log("Error in signing in.");
@@ -51,7 +100,6 @@ function Login() {
         e.preventDefault();
         submitLoginData(loginData);
     };
-
     return (
         <main className="bg-mesh-bright bg-cover min-h-screen">
             <Navbar />
@@ -89,6 +137,14 @@ function Login() {
                                 >
                                     Forgot Password?
                                 </Link>
+                                {errorMsg !== "" && (
+                                    <p className="text-red-600 flex items-center gap-2">
+                                        <span>
+                                            <RxCross1 className="text-sm" />
+                                        </span>
+                                        <span className="pb-[2px]">{errorMsg}</span>
+                                    </p>
+                                )}
                             </label>
                             <button
                                 type="submit"
@@ -100,21 +156,8 @@ function Login() {
                                 type="submit"
                                 className="flex items-center justify-center gap-2 w-full bg-white text-slate-600 py-2 mt-2 rounded-md "
                             >
-                                {/* <ImGoogle3 /> */}
                                 <AiOutlineUser className="text-xl" />
-                                <div
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        const updatedLoginData = {
-                                            email: "guest138@gmail.com",
-                                            password: "&JKz!z2ZLe9T6d*V",
-                                        };
-                                        setLoginData(updatedLoginData);
-                                        submitLoginData(updatedLoginData);
-                                    }}
-                                >
-                                    Continue as guest
-                                </div>
+                                <div onClick={loginAsAGuest}>Continue as guest</div>
                             </button>
                             <div className="text-center">
                                 <span className="text-slate-600">Don't have an account?</span>{" "}
