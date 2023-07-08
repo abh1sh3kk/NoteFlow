@@ -30,7 +30,7 @@ const signin = async (req: MyRequest, res: any) => {
 
     if (currentUser === null) {
         console.log("User doesn't exist.");
-        return res.status(400).send("Sorry, the user doesn't exist.");
+        return res.status(404).send("Sorry, the user doesn't exist.");
     }
 
     const passwordInDatabase: string | undefined = currentUser.password;

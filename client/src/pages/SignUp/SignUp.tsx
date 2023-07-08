@@ -66,7 +66,6 @@ function SignUp() {
         e.preventDefault();
 
         if (!parsedData?.success) {
-            console.log("Zod says something's wrong");
             setErrorMsg(JSON.parse(parsedData?.error?.message)[0].message);
             return;
         }
