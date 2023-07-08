@@ -9,13 +9,14 @@ import { fetchNotes } from "../../redux/actions/noteActions";
 import { fetchUser } from "../../redux/actions/userActions";
 import NoteView from "../NoteView/NoteView";
 import EmptyPage from "../EmptyPage/EmptyPage";
+import LoadingScreen from "../../components/LoadingScreen/LoadingScreen";
 
 function Homepage() {
     const navigate = useNavigate();
     fetchUser();
 
     const username: string = useSelector((state: any) => state.userName);
-    const noteData = useSelector((state: any) => state.notes);
+    const noteData: any = useSelector((state: any) => state.notes);
 
     const [searchText, setSearchText] = useState("");
     const handleSearch = (e: any) => {
@@ -100,7 +101,9 @@ function Homepage() {
                             />
                         </div>
                     </div>
-                    {noteData.length === 0 ? (
+                    {noteData === null ? (
+                        <LoadingScreen />
+                    ) : noteData.length === 0 ? (
                         <EmptyPage />
                     ) : (
                         <NoteView handleNoteClick={handleNoteClick} searchText={searchText} />

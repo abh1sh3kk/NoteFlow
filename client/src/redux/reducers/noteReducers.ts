@@ -8,22 +8,22 @@ export interface IAction {
     payload?: any;
 }
 
-export function notesReducer(
-    state: INote[] = initialNote,
-    action: IAction
-): INote[] {
+export function notesReducer(state: INote[] | null = initialNote, action: IAction): INote[] | null {
     switch (action.type) {
         case "ADD_NOTE":
-            return [...state, action.payload];
+            return [...state!, action.payload];
 
         case "REMOVE_NOTE":
-            return state.filter((note) => note.id !== action.payload.id);
+            return state?.filter((note) => note.id !== action.payload.id) || null;
 
         case "EDIT_NOTE":
-            const foundIndex = findIndexFromId(state, action.payload.id);
-            const newState = [...state];
+            const foundIndex = findIndexFromId(state!, action.payload.id);
+            const newState = [...state!];
             newState.splice(foundIndex, 1, action.payload);
             return newState;
+
+        case "FETCH_IN_PROGRESS":
+            return null;
 
         case "FETCH_SUCCESS":
             return action.payload.data;
