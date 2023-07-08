@@ -160,11 +160,12 @@ function Login() {
                                 Log In
                             </button>
                             <button
+                                onClick={loginAsAGuest}
                                 type="submit"
                                 className="flex items-center justify-center gap-2 w-full bg-white text-slate-600 py-2 mt-2 rounded-md "
                             >
                                 <AiOutlineUser className="text-xl" />
-                                <div onClick={loginAsAGuest}>Continue as guest</div>
+                                <div>Continue as guest</div>
                             </button>
                             <div className="text-center">
                                 <span className="text-slate-600">Don't have an account?</span>{" "}
