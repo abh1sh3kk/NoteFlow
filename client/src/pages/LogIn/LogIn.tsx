@@ -27,6 +27,7 @@ function Login() {
         email: "",
         password: "",
     });
+    const [guestLogin, setGuestLogin] = useState<boolean>(false);
 
     const showErrorMsg = async (message: string) => {
         setErrorMsg(message);
@@ -53,11 +54,21 @@ function Login() {
 
     useEffect(() => {
         parsedData = LoginSchema.safeParse(loginData);
+        if (guestLogin) {
+            submitLoginData(loginData);
+        }
     }, [loginData]);
 
     const loginAsAGuest = async (e: any) => {
         e.preventDefault();
-        submitLoginData({ email: "guest138@gmail.com", password: "hihacker" });
+
+        setGuestLogin(true);
+
+        const guestLoginData = {
+            email: "guest138@gmail.com",
+            password: "hihacker",
+        };
+        setLoginData(guestLoginData);
     };
 
     const submitLoginData = async (loginData: ILoginData) => {
