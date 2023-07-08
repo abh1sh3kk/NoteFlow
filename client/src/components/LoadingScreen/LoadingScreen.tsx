@@ -41,12 +41,3 @@ const LoadingScreen = (props: Props) => {
 };
 
 export default LoadingScreen;
-
-// <section className="flex flex-col items-center justify-center sm:pt-4">
-//     <figure>
-//         <img src={addNoteImg} className="sm:w-80 w-60" alt="" />
-//     </figure>
-//     <article className="font-mono text-lg sm:text-2xl mt-6 sm:mt-10 text-slate-500 font-medium text-center">
-//         Loading
-//     </article>
-// </section>

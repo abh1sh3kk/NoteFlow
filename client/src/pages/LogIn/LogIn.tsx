@@ -17,7 +17,7 @@ const LoginSchema = z.object({
     password: z.coerce
         .string()
         .min(6, { message: "Minimum 6 characters are required." })
-        .max(16, { message: "Sorry, you can't enter more than 16 characters." }),
+        .max(22, { message: "Sorry, you can't enter more than 22 characters." }),
 });
 
 function Login() {
@@ -30,9 +30,6 @@ function Login() {
 
     const showErrorMsg = async (message: string) => {
         setErrorMsg(message);
-        // setTimeout(() => {
-        //     setErrorMsg("");
-        // }, 4000);
     };
 
     let parsedData: z.SafeParseReturnType<
@@ -60,7 +57,7 @@ function Login() {
 
     const loginAsAGuest = async (e: any) => {
         e.preventDefault();
-        submitLoginData({ email: "guest138@gmail.com", password: "&JKz!z2ZLe9T6d*V" });
+        submitLoginData({ email: "guest138@gmail.com", password: "hihacker" });
     };
 
     const submitLoginData = async (loginData: ILoginData) => {

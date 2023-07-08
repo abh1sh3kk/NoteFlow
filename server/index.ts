@@ -26,7 +26,7 @@ app.use(cookieParser());
 app.use("/users", userRouter);
 app.use("/notes", noteRouter);
 
-export const getNoteFromEmail = async (email: string) => {
+export const getNoteFromEmail = async (email: string): Promise<any> => {
     const currentUser = await userData.findOne({ email }, { noteList: true });
     return currentUser?.noteList || [];
 };

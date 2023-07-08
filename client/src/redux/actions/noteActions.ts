@@ -78,7 +78,6 @@ export async function removeNote(id: string | Number) {
 
 export async function fetchNotes() {
     store.dispatch({ type: "FETCH_IN_PROGRESS" });
-    console.log("loading should be shown.");
     try {
         // @ts-ignore
         const backendLink = import.meta.env.VITE_BACKEND_API;
