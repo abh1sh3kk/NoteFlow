@@ -12,7 +12,7 @@ function Editor({
     //color
     const INITIAL_COLOR = "#FFF6C7";
     const [selectedColor, setSelectedColor] = useState(color || INITIAL_COLOR);
-    
+
     const handleColorChange = (color: string) => {
         setSelectedColor(color);
     };
@@ -60,7 +60,7 @@ function Editor({
     return (
         <main className="min-h-screen min-w-full bg-black bg-opacity-40 text-white fixed scroll-m-8 top-0 left-0 flex justify-center items-center">
             {/* Popup area */}
-            <div className="lg:my-4 lg:rounded-md w-full bg-texture bg-white bg-fixed bg-cover flex sm:pt-10 max-w-[850px] justify-center items-center p-4 relative">
+            <div className="my-0 lg:my-4 lg:rounded-md w-full bg-texture bg-white bg-fixed bg-cover flex sm:pt-10 max-w-[850px] justify-center items-center p-4 relative">
                 <button
                     onClick={handleCrossButton}
                     className="text-slate-600 absolute top-2 right-2"
@@ -116,6 +116,22 @@ function Editor({
                         value={theNote}
                         onChange={handleNoteChange}
                     ></textarea>
+                    {dateCreated && (
+                        <div className="flex justify-between w-full sm:max-w-[580px]">
+                            <div>
+                                <div className="text-slate-500">Date Created</div>
+                                <span className="text-slate-600 italic font-thin">
+                                    {dateCreated}
+                                </span>
+                            </div>
+                            {dateModified && (
+                                <div className="text-right">
+                                    <div className="text-slate-500">Date Modified</div>
+                                    <span className="text-slate-600 font-thin">{dateModified}</span>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </form>
             </div>
         </main>
