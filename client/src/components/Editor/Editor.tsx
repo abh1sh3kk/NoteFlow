@@ -118,7 +118,7 @@ function Editor({
                     ></textarea>
 
                     {dateCreated && (
-                        <div className="flex justify-between w-full sm:max-w-[580px]">
+                        <div className="flex justify-between w-full sm:max-w-[580px] text-sm sm:text-base">
                             <div>
                                 <div className="text-slate-500">Date Created</div>
                                 <span className="text-slate-600 font-thin">

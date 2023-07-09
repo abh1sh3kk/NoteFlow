@@ -33,9 +33,11 @@ function Note({ id, title, note, color, dateCreated, dateModified, handleNoteCli
                         <p className="line-clamp-4 text-base">{note}</p>
                     </div>
                     <div className="flex flex-col gap-1">
-                        {!dateModified && (<p className="line-clamp-2 text-slate-700 ">
-                            Created On: {dateCreated}
-                        </p>)}
+                        {!dateModified && (
+                            <p className="line-clamp-2 text-slate-700 ">
+                                Created On: {dateCreated}
+                            </p>
+                        )}
                         {dateModified && (
                             <p className="line-clamp-2 text-slate-600">
                                 Last Modified: {dateModified}
@@ -45,15 +47,15 @@ function Note({ id, title, note, color, dateCreated, dateModified, handleNoteCli
                 </div>
 
                 <div className="note-lower flex justify-between gap-2 w-full">
-                    <div className="note__icons-left flex gap-4 text-base">
+                    <div className="note__icons-left flex gap-4 text-lg">
                         {/* {isPinned ? <BsPinAngleFill /> : <BsPinAngle />} */}
-                        <MdOutlineControlPointDuplicate onClick={handleDuplicateNote} />
-                        <FiEdit onClick={handleNoteEdit} />
+                        <MdOutlineControlPointDuplicate className="hover:scale-110" onClick={handleDuplicateNote} />
+                        <FiEdit className="hover:scale-110" onClick={handleNoteEdit} />
 
                         {/* <GoDuplicate /> */}
                     </div>
-                    <div onClick={handleNoteDelete} className="note__icons-right text-lg">
-                        <MdDeleteForever />
+                    <div onClick={handleNoteDelete} className="note__icons-right text-xl">
+                        <MdDeleteForever className="hover:scale-110" />
                     </div>
                 </div>
             </section>
