@@ -50,7 +50,7 @@ function Navbar() {
 
     return (
         <header className="flex justify-center text-slate-700 bg-transparent">
-            <nav className="max-w-[965px] w-full flex items-center justify-between h-[64px] border-b-[1px] px-4 border-b-slate-300 gap-4 ">
+            <nav className="max-w-[1100px] w-full flex items-center justify-between h-[64px] border-b-[1px] px-4 border-b-slate-300 gap-4 ">
                 <div className="flex items-center justify-center gap-1 logo-side ">
                     <div>
                         <img src={Logo} alt="" className="w-6" />
