@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MdOutlineLogout } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
+// @ts-ignore
 import Logo from "../../assets/logo.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -50,7 +51,7 @@ function Navbar() {
 
     return (
         <header className="flex justify-center text-slate-700 bg-transparent">
-            <nav className="max-w-[1100px] w-full flex items-center justify-between h-[64px] border-b-[1px] px-4 border-b-slate-300 gap-4 ">
+            <nav className="max-w-[1050px] w-full flex items-center justify-between h-[64px] border-b-[1px] px-4 border-b-slate-300 gap-4 ">
                 <div className="flex items-center justify-center gap-1 logo-side ">
                     <div>
                         <img src={Logo} alt="" className="w-6" />
@@ -59,10 +60,12 @@ function Navbar() {
                 </div>
                 {userExists ? (
                     <div className="flex items-center justify-center gap-4 right-side">
-                        <div className="flex items-center justify-center gap-2 font-normal nav-account">
-                            <AiOutlineUser />
-                            <p>{username}</p>
-                        </div>
+                        {username !== null && (
+                            <div className="flex items-center justify-center gap-2 font-normal nav-account">
+                                <AiOutlineUser />
+                                <p>{username}</p>
+                            </div>
+                        )}
 
                         <button
                             onClick={handleLogout}

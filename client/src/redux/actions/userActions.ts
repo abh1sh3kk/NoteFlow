@@ -1,4 +1,3 @@
-import { AiOutlineConsoleSql } from "react-icons/ai";
 import { store } from "../store";
 import { clearNotes } from "./noteActions";
 
@@ -6,6 +5,7 @@ export async function fetchUser() {
     const userNameFromEmail = (email: string): string => {
         return email.split("@")[0];
     };
+    store.dispatch({ type: "USER_FETCH_PROGRESS" });
     try {
         // @ts-ignore
         const backendLink = import.meta.env.VITE_BACKEND_API;

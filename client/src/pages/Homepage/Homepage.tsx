@@ -13,9 +13,12 @@ import LoadingScreen from "../../components/LoadingScreen/LoadingScreen";
 
 function Homepage() {
     const navigate = useNavigate();
-    fetchUser();
 
-    const username: string = useSelector((state: any) => state.userName);
+    useEffect(() => {
+        fetchUser();
+    }, []);
+
+    const username: string | null = useSelector((state: any) => state.userName);
     const noteData: any = useSelector((state: any) => state.notes);
 
     const [searchText, setSearchText] = useState("");
@@ -24,6 +27,7 @@ function Homepage() {
     };
 
     useEffect(() => {
+        if (username === null) return;
         if (username === "") navigate("/users/signup");
         else fetchNotes();
     }, [username]);
@@ -80,10 +84,12 @@ function Homepage() {
         <main className="bg-mesh-bright bg-cover min-h-screen">
             <Navbar />
             <div className="w-full flex justify-center pb-8">
-                <section className="w-full max-w-[1100px] flex flex-col gap-4 px-4 lg:px-0">
+                <section className="w-full max-w-[1050px] flex flex-col gap-4 px-4 lg:px-0">
                     <div className="create-note-area flex justify-between">
                         <div className="create-area my-4">
                             <button
+                                disabled={username === null}
+                                style={username === null ? { opacity: "60%" } : {}}
                                 onClick={handleCreateNote}
                                 className="flex justify-center items-center gap-1 sm:gap-2 bg-purple-500 text-white py-2 pe-4 ps-3 sm:py-2 sm:ps-3 sm:pe-5 rounded-md"
                             >
@@ -101,7 +107,7 @@ function Homepage() {
                             />
                         </div>
                     </div>
-                    {noteData === null ? (
+                    {noteData === null || username === null ? (
                         <LoadingScreen />
                     ) : noteData.length === 0 ? (
                         <EmptyPage />
