@@ -27,6 +27,9 @@ function Login() {
         email: "",
         password: "",
     });
+
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
     const [guestLogin, setGuestLogin] = useState<boolean>(false);
 
     const showErrorMsg = async (message: string) => {
@@ -76,6 +79,8 @@ function Login() {
             showErrorMsg("Enter a valid password");
             return;
         }
+        setErrorMsg("");
+        setIsLoading(true);
         try {
             // @ts-ignore
             const backendLink = import.meta.env.VITE_BACKEND_API;
@@ -100,6 +105,7 @@ function Login() {
             }
         } catch (e) {
             console.log("Error in signing in.");
+            setIsLoading(false);
         }
     };
 
@@ -155,6 +161,8 @@ function Login() {
                             </label>
                             <button
                                 type="submit"
+                                disabled={isLoading}
+                                style={isLoading ? { opacity: "40%" } : {}}
                                 className="w-full bg-[#7059ff] text-white py-2 mt-2 rounded-md "
                             >
                                 Log In
@@ -162,6 +170,8 @@ function Login() {
                             <button
                                 onClick={loginAsAGuest}
                                 type="submit"
+                                disabled={isLoading}
+                                style={isLoading ? { opacity: "40%" } : {}}
                                 className="flex items-center justify-center gap-2 w-full bg-white text-slate-600 py-2 mt-2 rounded-md "
                             >
                                 <AiOutlineUser className="text-xl" />

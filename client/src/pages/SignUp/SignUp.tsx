@@ -4,7 +4,6 @@ import { Link, json, useNavigate } from "react-router-dom";
 import signupImg from "../../assets/signup2.svg";
 import { useSelector } from "react-redux";
 import Navbar from "../../components/Navbar/Navbar";
-import { fetchUser } from "../../redux/actions/userActions";
 import { z } from "zod";
 import { RxCross1 } from "react-icons/rx";
 
@@ -27,9 +26,9 @@ const SignupSchema = z
 
 function SignUp() {
     const navigate = useNavigate();
-    fetchUser();
     const username: string = useSelector((state: any) => state.userName);
     const [errorMsg, setErrorMsg] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (username !== "") navigate("/");
@@ -66,9 +65,14 @@ function SignUp() {
         e.preventDefault();
 
         if (!parsedData?.success) {
-            setErrorMsg(JSON.parse(parsedData?.error?.message)[0].message);
+            const errorListZod = parsedData?.error?.message;
+            const errorMsgZod = errorListZod && JSON.parse(errorListZod)[0].message;
+            errorMsgZod && setErrorMsg(errorMsgZod);
             return;
         }
+
+        setErrorMsg("");
+        setIsLoading(true);
 
         try {
             // @ts-ignore
@@ -81,13 +85,17 @@ function SignUp() {
                 },
                 body: JSON.stringify(formData),
             });
+            setIsLoading(false);
             if (res.ok) {
                 navigate("/");
             } else if (res.status === 409) {
                 setErrorMsg("Sorry the email already exists.");
+                // setIsLoading(false);
             }
         } catch (error) {
             console.log("Sign up failed and the reason is ", e);
+            setErrorMsg("Internal Error.");
+            setIsLoading(false);
         }
     };
 
@@ -138,6 +146,8 @@ function SignUp() {
                                 </p>
                             )}
                             <button
+                                disabled={isLoading}
+                                style={isLoading ? { opacity: "40%" } : {}}
                                 type="submit"
                                 className="w-full bg-[#7059ff] text-white py-2 mt-2 rounded-md "
                             >
