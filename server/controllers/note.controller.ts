@@ -1,8 +1,8 @@
 import { getNoteFromEmail, getUserEmail } from "..";
-import { MyRequest } from "../middlewares/auth";
+import { IRequest } from "../middlewares/auth";
 import userData, { INote } from "../models/user.model";
 
-const populateWithNotes = async (req: MyRequest, res: any) => {
+const populateWithNotes = async (req: IRequest, res: any) => {
     const email: string = getUserEmail(req);
 
     if (email === "") return res.status(400);
@@ -164,7 +164,7 @@ export const insertNote = async (req: any, res: any) => {
     return res.status(201).end();
 };
 
-const healthCheck = (req: MyRequest, res: any) => {
+const healthCheck = (req: IRequest, res: any) => {
     console.log("I am slow but I am working");
     res.send("I am ok, how are you?");
     res.end();

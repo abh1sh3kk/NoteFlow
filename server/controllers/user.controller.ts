@@ -1,12 +1,13 @@
-import { MyRequest } from "../middlewares/auth";
+import { IRequest } from "../middlewares/auth";
 import userData from "../models/user.model";
 import bcrypt from "bcrypt";
 import { generateTokens } from "../services/token.service";
 import { getUserEmail } from "..";
 
-const signout = async (req: MyRequest, res: any) => {
+const signout = async (req: IRequest, res: any) => {
     const email = getUserEmail(req);
-    const refreshToken = JSON.parse(req.cookies.tokens).refreshToken;
+    const userToken: string = req.cookies.tokens;
+    const refreshToken: any = JSON.parse(userToken).refreshToken;
 
     await userData.findOneAndUpdate(
         { email },
@@ -22,7 +23,7 @@ const signout = async (req: MyRequest, res: any) => {
     return res.status(204).end();
 };
 
-const signin = async (req: MyRequest, res: any) => {
+const signin = async (req: IRequest, res: any) => {
     const { email, password } = req.body;
 
     // -------------------- Validity Check -----------------------
@@ -64,7 +65,7 @@ const signin = async (req: MyRequest, res: any) => {
         .end();
 };
 
-const signup = async (req: MyRequest, res: any) => {
+const signup = async (req: IRequest, res: any) => {
     const { email, password } = req?.body;
 
     // -------------------- Validity Check -----------------------
@@ -129,7 +130,7 @@ const signup = async (req: MyRequest, res: any) => {
         .end();
 };
 
-const signOutFromAllSessions = async (req: MyRequest, res: any) => {
+const signOutFromAllSessions = async (req: IRequest, res: any) => {
     const email: string = getUserEmail(req);
     try {
         await userData.findOneAndUpdate({ email }, { $set: { sessions: [] } });
@@ -147,7 +148,7 @@ const signOutFromAllSessions = async (req: MyRequest, res: any) => {
         .end();
 };
 
-const getEmail = (req: MyRequest, res: any) => {
+const getEmail = (req: IRequest, res: any) => {
     const email: string = getUserEmail(req);
 
     return res.status(200).json(email);

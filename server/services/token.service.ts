@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { MyRequest } from "../middlewares/auth";
+import { IRequest } from "../middlewares/auth";
 
 export const generateTokens = (payload: any) => {
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_KEY!, {
@@ -21,7 +21,7 @@ export const getPayloadFromToken = (access_token: string) => {
     return decodedJWT;
 };
 
-export const getAccessToken = (req: MyRequest): String => {
+export const getAccessToken = (req: IRequest): String => {
     const extractedAccessToken: string = getAccessTokenFromRequest(req);
     const extractedRefreshToken: string = getRefreshTokenFromRequest(req);
 
@@ -49,7 +49,7 @@ export const getAccessToken = (req: MyRequest): String => {
     return accessToken;
 };
 
-export const getAccessTokenFromRequest = (req: MyRequest) => {
+export const getAccessTokenFromRequest = (req: IRequest) => {
     const tokens_string: string = req?.cookies?.tokens;
     const tokens = tokens_string && JSON.parse(tokens_string);
     const access_token: string = tokens?.accessToken || "";
@@ -57,7 +57,7 @@ export const getAccessTokenFromRequest = (req: MyRequest) => {
     return access_token;
 };
 
-export const getRefreshTokenFromRequest = (req: MyRequest) => {
+export const getRefreshTokenFromRequest = (req: IRequest) => {
     const tokens_string: string = req?.cookies?.tokens || "";
     const tokens = tokens_string && JSON.parse(tokens_string);
     const refresh_token: string = tokens?.refreshToken || "";
