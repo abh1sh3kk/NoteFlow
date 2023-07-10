@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineUser } from "react-icons/ai";
 import { z } from "zod";
 // @ts-ignore
@@ -21,21 +21,20 @@ export interface IStore {
 }
 
 const LoginSchema = z.object({
-    email: z.coerce.string().email({ message: "Please enter a valid email address." }),
+    email: z.coerce.string().email({ message: "Sorry the email address is not valid." }),
     password: z.coerce
         .string()
-        .min(6, { message: "Minimum 6 characters are required." })
-        .max(22, { message: "Sorry, you can't enter more than 22 characters." }),
+        .min(6, { message: "Sorry, password is too short." })
+        .max(22, { message: "Sorry, password is too long." }),
 });
 
 function Login() {
     const navigate = useNavigate();
+
     const username = useSelector((store: IStore) => store.userName);
-    const [errorMsg, setErrorMsg] = useState<String>("");
-    const [loginData, setLoginData] = useState<ILoginData>({
-        email: "",
-        password: "",
-    });
+
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [guestLogin, setGuestLogin] = useState<boolean>(false);
 
     useEffect(() => {
         fetchUser();
@@ -46,13 +45,12 @@ function Login() {
         if (username !== "") navigate("/");
     }, [username]);
 
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-
-    const [guestLogin, setGuestLogin] = useState<boolean>(false);
-
+    // -----------------------------------------------------------
+    const [errorMsg, setErrorMsg] = useState<String>("");
     const showErrorMsg = async (message: string) => {
         setErrorMsg(message);
     };
+    // -----------------------------------------------------------
 
     let parsedData: z.SafeParseReturnType<
         {
@@ -66,12 +64,11 @@ function Login() {
         | undefined
     >;
 
-    const handleLoginDataChange = (e: any) => {
-        setLoginData((oldData) => ({
-            ...oldData,
-            [e.target.name]: e.target.value,
-        }));
-    };
+    // -----------------------------------------------------------
+    const [loginData, setLoginData] = useState<ILoginData>({
+        email: "",
+        password: "",
+    });
 
     useEffect(() => {
         parsedData = LoginSchema.safeParse(loginData);
@@ -79,6 +76,14 @@ function Login() {
             submitLoginData(loginData);
         }
     }, [loginData]);
+    // -----------------------------------------------------------
+
+    const handleLoginDataChange = (e: any) => {
+        setLoginData((oldData) => ({
+            ...oldData,
+            [e.target.name]: e.target.value,
+        }));
+    };
 
     const loginAsAGuest = async (e: any) => {
         e.preventDefault();
@@ -93,10 +98,18 @@ function Login() {
     };
 
     const submitLoginData = async (loginData: ILoginData) => {
-        if (!parsedData?.success) {
-            showErrorMsg("Enter a valid password");
+        const afterParseData = LoginSchema.safeParse(loginData);
+
+        if (!afterParseData.success) {
+            const formattedErrors = afterParseData.error.format();
+            const emailError = formattedErrors.email?._errors[0];
+            const passwordError = formattedErrors.password?._errors[0];
+
+            if (emailError) setErrorMsg(emailError);
+            else if (passwordError) setErrorMsg(passwordError);
             return;
         }
+
         setErrorMsg("");
         setIsLoading(true);
         try {
@@ -124,7 +137,6 @@ function Login() {
             }
         } catch (e) {
             console.log("Error in signing in.");
-            setIsLoading(false);
         }
         setIsLoading(false);
     };
@@ -133,6 +145,7 @@ function Login() {
         e.preventDefault();
         submitLoginData(loginData);
     };
+
     return (
         <main className="bg-mesh-bright bg-cover min-h-screen">
             <Navbar />
@@ -150,7 +163,7 @@ function Login() {
                                     <div>Email</div>
                                     <input
                                         name="email"
-                                        type="email"
+                                        // type="email"
                                         onChange={handleLoginDataChange}
                                         value={loginData.email}
                                         className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "

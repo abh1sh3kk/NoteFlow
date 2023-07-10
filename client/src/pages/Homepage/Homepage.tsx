@@ -29,7 +29,6 @@ function Homepage() {
     useEffect(() => {
         if (username === null) return;
         if (username === "") {
-            alert("navigate to signup?");
             navigate('/users/signup')
         } else fetchNotes();
     }, [username]);

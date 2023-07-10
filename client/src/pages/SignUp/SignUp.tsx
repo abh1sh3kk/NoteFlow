@@ -33,7 +33,6 @@ function SignUp() {
     useEffect(() => {
         if (username === null) return;
         if (username !== "") {
-            alert("navigate to homepage?");
             navigate("/");
         }
     }, [username]);
