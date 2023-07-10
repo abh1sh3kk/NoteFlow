@@ -31,7 +31,8 @@ const LoginSchema = z.object({
 function Login() {
     const navigate = useNavigate();
 
-    const username = useSelector((store: IStore) => store.userName);
+    // const username = useSelector((store: IStore) => store.userName);
+    const username = null;
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [guestLogin, setGuestLogin] = useState<boolean>(false);
@@ -221,7 +222,11 @@ function Login() {
                         </div>
                     </div>
                 ) : (
-                    <h1>Hi</h1>
+                    <div className="flex items-center justify-center space-x-2">
+                        <div className="w-4 h-4 rounded-full animate-pulse dark:bg-purple-500"></div>
+                        <div className="w-4 h-4 rounded-full animate-pulse dark:bg-purple-500"></div>
+                        <div className="w-4 h-4 rounded-full animate-pulse dark:bg-purple-500"></div>
+                    </div>
                 )}
             </section>
         </main>

@@ -30,7 +30,7 @@ function Navbar() {
 
     const populateDB = async () => {
         try {
-            if (userState === "LOGGED_OUT") return;
+            if (username === "") return;
 
             // @ts-ignore
             const backendLink = import.meta.env.VITE_BACKEND_API;

@@ -27,6 +27,7 @@ const SignupSchema = z
 function SignUp() {
     const navigate = useNavigate();
     const username: string = useSelector((state: any) => state.userName);
+
     const [errorMsg, setErrorMsg] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -106,66 +107,78 @@ function SignUp() {
         <main className="bg-mesh-bright bg-cover min-h-screen">
             <Navbar />
             <section className="py-4 sm:flex justify-center items-center min-h-[600px]">
-                <section className="sm:flex sm:border-b-2 sm:border-b-slate-400 sm:gap-32 items-center justify-between">
-                    <div className="signup-section sm:w-[340px] px-4">
-                        <h1 className="text-xl mb-4 font-medium">Signup</h1>
-                        <form onSubmit={handleSignUp} className="flex flex-col gap-3">
-                            <label>
-                                <div>Email</div>
-                                <input
-                                    name="email"
-                                    type="email"
-                                    className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <label>
-                                <div>Password</div>
-                                <input
-                                    name="password"
-                                    className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
-                                    value={formData.password}
-                                    type="password"
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <label>
-                                <div>Confirm Password</div>
-                                <input
-                                    name="confirmPassword"
-                                    type="password"
-                                    className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
-                                    value={formData.confirmPassword}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            {errorMsg !== "" && (
-                                <p className="text-red-600 flex items-center gap-2">
-                                    <span>
-                                        <RxCross1 className="text-sm" />
-                                    </span>
-                                    <span className="pb-[2px]">{errorMsg}</span>
-                                </p>
-                            )}
-                            <button
-                                disabled={isLoading}
-                                style={isLoading ? { opacity: "40%" } : {}}
-                                type="submit"
-                                className="w-full bg-[#7059ff] text-white py-2 mt-2 rounded-md "
-                            >
-                                Sign Up
-                            </button>
-                            <Link to="/users/signin" className="my-2 text-[#7059ff]">
-                                Already a member?
-                            </Link>
-                        </form>
-                    </div>
+                {username !== null ? (
+                    <section className="sm:flex sm:border-b-2 sm:border-b-slate-400 sm:gap-32 items-center justify-between">
+                        <div className="signup-section sm:w-[340px] px-4">
+                            <h1 className="text-xl mb-4 font-medium">Signup</h1>
+                            <form onSubmit={handleSignUp} className="flex flex-col gap-3">
+                                <label>
+                                    <div>Email</div>
+                                    <input
+                                        name="email"
+                                        type="email"
+                                        className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
+                                        value={formData.email}
+                                        onChange={handleInputChange}
+                                    />
+                                </label>
+                                <label>
+                                    <div>Password</div>
+                                    <input
+                                        name="password"
+                                        className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
+                                        value={formData.password}
+                                        type="password"
+                                        onChange={handleInputChange}
+                                    />
+                                </label>
+                                <label>
+                                    <div>Confirm Password</div>
+                                    <input
+                                        name="confirmPassword"
+                                        type="password"
+                                        className="w-full h-10 bg-slate-300 rounded-md outline-transparent border-none focus:outline-purple-500 focus:outline-[3px] ps-2 text-sm "
+                                        value={formData.confirmPassword}
+                                        onChange={handleInputChange}
+                                    />
+                                </label>
+                                {errorMsg !== "" && (
+                                    <p className="text-red-600 flex items-center gap-2">
+                                        <span>
+                                            <RxCross1 className="text-sm" />
+                                        </span>
+                                        <span className="pb-[2px]">{errorMsg}</span>
+                                    </p>
+                                )}
+                                <button
+                                    disabled={isLoading}
+                                    style={isLoading ? { opacity: "40%" } : {}}
+                                    type="submit"
+                                    className="w-full bg-[#7059ff] text-white py-2 mt-2 rounded-md "
+                                >
+                                    Sign Up
+                                </button>
+                                <Link to="/users/signin" className="my-2 text-[#7059ff]">
+                                    Already a member?
+                                </Link>
+                            </form>
+                        </div>
 
-                    <div className="">
-                        <img src={signupImg} alt="" className="sm:block hidden sm:max-w-[720px]" />
+                        <div className="">
+                            <img
+                                src={signupImg}
+                                alt=""
+                                className="sm:block hidden sm:max-w-[720px]"
+                            />
+                        </div>
+                    </section>
+                ) : (
+                    <div className="flex items-center justify-center space-x-2">
+                        <div className="w-4 h-4 rounded-full animate-pulse dark:bg-purple-500"></div>
+                        <div className="w-4 h-4 rounded-full animate-pulse dark:bg-purple-500"></div>
+                        <div className="w-4 h-4 rounded-full animate-pulse dark:bg-purple-500"></div>
                     </div>
-                </section>
+                )}
             </section>
         </main>
     );
