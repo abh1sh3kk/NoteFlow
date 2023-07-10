@@ -1,52 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { MdOutlineLogout } from "react-icons/md";
-import { AiOutlineUser } from "react-icons/ai";
-// @ts-ignore
-import Logo from "../../assets/logo.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { store } from "../../redux/store";
+
+import { MdOutlineLogout } from "react-icons/md";
+import { AiOutlineUser } from "react-icons/ai";
+
+// @ts-ignore
+import Logo from "../../assets/logo.svg";
+
 import { clearNotes, fetchNotes } from "../../redux/actions/noteActions";
+import { IStore } from "../../pages/LogIn/LogIn";
+import { fetchUser, removeUser } from "../../redux/actions/userActions";
 
 function Navbar() {
     const navigate = useNavigate();
 
-    const username: string = useSelector((state: any) => state.userName);
-    const [userExists, setUserExists] = useState(false);
+    const username: string | null = useSelector((state: IStore) => state.userName);
 
     useEffect(() => {
-        setUserExists(username !== "");
-    }, [username]);
+        fetchUser();
+    }, []);
 
-    const handleLogout = () => {
-        // @ts-ignore
-        const backendLink = import.meta.env.VITE_BACKEND_API;
-        fetch(`${backendLink}/users/signout`, { credentials: "include" }).then(() => {
-            store.dispatch({
-                type: "REMOVE_USER",
-            });
-            clearNotes();
-            navigate("/users/signup");
-        });
+    const handleLogout = async () => {
+        await removeUser();
+        clearNotes();
+        navigate("/users/signup");
     };
 
     const populateDB = async () => {
         try {
-            if (!userExists) return;
+            if (userState === "LOGGED_OUT") return;
 
             // @ts-ignore
             const backendLink = import.meta.env.VITE_BACKEND_API;
             await fetch(`${backendLink}/notes/populate`, { credentials: "include" });
+
             fetchNotes();
         } catch (e) {
             console.log("Error in populating because ", e.message);
         }
-    };
-    const handleLogIn = async () => {
-        // @ts-ignore
-        const backendLink = import.meta.env.VITE_BACKEND_API;
-        await fetch(`${backendLink}/users/signin`, { credentials: "include" });
     };
 
     return (
@@ -58,26 +51,8 @@ function Navbar() {
                     </div>
                     <h3 onClick={populateDB}>NoteFlow</h3>
                 </div>
-                {userExists ? (
-                    <div className="flex items-center justify-center gap-4 right-side">
-                        {username !== null && (
-                            <div className="flex items-center justify-center gap-2 font-normal nav-account">
-                                <AiOutlineUser />
-                                <p>{username}</p>
-                            </div>
-                        )}
 
-                        <button
-                            onClick={handleLogout}
-                            className="text-base items-center flex gap-2 px-4 py-1  border-white rounded-md nav-logout"
-                            type="button"
-                        >
-                            <p className="">Log Out</p>
-
-                            <MdOutlineLogout className="sm:block hidden" />
-                        </button>
-                    </div>
-                ) : (
+                {username === "" ? (
                     <div className="flex gap-2 sm:gap-4">
                         <Link
                             to="/users/signin"
@@ -91,6 +66,28 @@ function Navbar() {
                         >
                             Sign Up
                         </Link>
+                    </div>
+                ) : username === null ? (
+                    <div className="flex gap-4 animate-pulse">
+                        <div className="rounded-full bg-slate-500 h-10 w-10"></div>
+                        <div className="rounded-full bg-slate-500 h-10 w-10"></div>
+                    </div>
+                ) : (
+                    <div className="flex items-center justify-center gap-4 right-side">
+                        <div className="flex items-center justify-center gap-2 font-normal nav-account">
+                            <AiOutlineUser />
+                            <p>{username}</p>
+                        </div>
+
+                        <button
+                            onClick={handleLogout}
+                            className="text-base items-center flex gap-2 px-4 py-1  border-white rounded-md nav-logout"
+                            type="button"
+                        >
+                            <p className="">Log Out</p>
+
+                            <MdOutlineLogout className="sm:block hidden" />
+                        </button>
                     </div>
                 )}
             </nav>
