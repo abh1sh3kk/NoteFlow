@@ -28,8 +28,10 @@ function Homepage() {
 
     useEffect(() => {
         if (username === null) return;
-        if (username === "") navigate("/users/signup");
-        else fetchNotes();
+        if (username === "") {
+            alert("navigate to signup?");
+            navigate('/users/signup')
+        } else fetchNotes();
     }, [username]);
 
     // -------------------- Struggle to open editor ---------------------

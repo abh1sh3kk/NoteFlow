@@ -31,7 +31,11 @@ function SignUp() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        if (username !== "") navigate("/");
+        if (username === null) return;
+        if (username !== "") {
+            alert("navigate to homepage?");
+            navigate("/");
+        }
     }, [username]);
 
     const [formData, setFormData] = useState({
