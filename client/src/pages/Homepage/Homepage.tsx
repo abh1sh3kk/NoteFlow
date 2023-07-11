@@ -85,9 +85,9 @@ function Homepage() {
         <main className="bg-mesh-bright bg-cover min-h-screen">
             <Navbar />
             <div className="w-full flex justify-center pb-8">
-                <section className="w-full max-w-[1050px] flex flex-col gap-4 px-4 lg:px-0">
-                    <div className="create-note-area flex justify-between">
-                        <div className="create-area my-4">
+                <section className="w-full max-w-[1050px] flex flex-col gap-6 px-4 lg:px-0">
+                    <div className="create-note-area flex justify-between pt-6">
+                        <div className="create-area">
                             <button
                                 disabled={username === null}
                                 style={username === null ? { opacity: "60%" } : {}}
