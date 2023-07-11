@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 
 import { MdOutlineLogout } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
+import { RxDividerVertical } from "react-icons/rx";
+import { FaUser } from "react-icons/fa";
 
 // @ts-ignore
 import Logo from "../../assets/logo.svg";
@@ -47,9 +49,11 @@ function Navbar() {
             <nav className="max-w-[1050px] w-full flex items-center justify-between h-[64px] border-b-[1px] px-4 border-b-slate-300 gap-4 ">
                 <div className="flex items-center justify-center gap-1 logo-side ">
                     <div>
-                        <img src={Logo} alt="" className="w-6" />
+                        <img src={Logo} alt="" className="w-7" />
                     </div>
-                    <h3 onClick={populateDB}>NoteFlow</h3>
+                    <h3 onClick={populateDB} className="">
+                        NoteFlow
+                    </h3>
                 </div>
 
                 {username === "" ? (
@@ -73,20 +77,20 @@ function Navbar() {
                         <div className="rounded-full bg-slate-500 h-10 w-10"></div>
                     </div>
                 ) : (
-                    <div className="flex items-center justify-center gap-4 right-side">
-                        <div className="flex items-center justify-center gap-2 font-normal nav-account">
-                            <AiOutlineUser />
-                            <p>{username}</p>
+                    <div className="flex items-center justify-center right-side gap-2 sm:gap-4">
+                        <div className="flex items-center justify-center gap-2 font-normal p-2 rounded-md hover:bg-fuchsia-300">
+                            {/* <AiOutlineUser /> */}
+                            <FaUser className="text-violet-500" />
+                            <p className="font-normal">{username}</p>
                         </div>
 
                         <button
                             onClick={handleLogout}
-                            className="text-base items-center flex gap-2 px-4 py-1  border-white rounded-md nav-logout"
+                            className="text-base items-center flex gap-2 px-4 py-2 rounded-md bg-fuchsia-500 text-white"
                             type="button"
                         >
-                            <p className="">Log Out</p>
-
                             <MdOutlineLogout className="sm:block hidden" />
+                            <p className="">Logout</p>
                         </button>
                     </div>
                 )}
