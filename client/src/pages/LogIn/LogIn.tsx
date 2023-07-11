@@ -31,8 +31,7 @@ const LoginSchema = z.object({
 function Login() {
     const navigate = useNavigate();
 
-    // const username = useSelector((store: IStore) => store.userName);
-    const username = null;
+    const username = useSelector((store: IStore) => store.userName);
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [guestLogin, setGuestLogin] = useState<boolean>(false);
