@@ -1,3 +1,5 @@
 *.code-workspace
 *.txt
 client/.env
+.vscode/
+*.code-workspace

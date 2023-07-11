@@ -22,44 +22,41 @@ function Note({ id, title, note, color, dateCreated, dateModified, handleNoteCli
     };
 
     return (
-        <>
-            <section
-                style={{ backgroundColor: color }}
-                className="w-full px-6 py-6 text-sm flex flex-col justify-between gap-8 rounded-[10px] hover:shadow-sm cursor-pointer"
-            >
-                <div className="note-upper flex flex-col gap-4 justify-between h-full">
-                    <div className="flex flex-col gap-1 sm:gap-2">
-                        <h2 className="text-lg line-clamp-1">{title}</h2>
-                        <p className="line-clamp-4 text-base">{note}</p>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                        {!dateModified && (
-                            <p className="line-clamp-2 text-slate-700 ">
-                                Created On: {dateCreated}
-                            </p>
-                        )}
-                        {dateModified && (
-                            <p className="line-clamp-2 text-slate-600">
-                                Last Modified: {dateModified}
-                            </p>
-                        )}
-                    </div>
+        <section
+            style={{ backgroundColor: color }}
+            className="w-full px-6 py-6 text-sm flex flex-col justify-between gap-8 rounded-[10px] hover:shadow-sm cursor-pointer"
+        >
+            <div className="note-upper flex flex-col gap-4 justify-between h-full">
+                <div className="flex flex-col gap-1 sm:gap-2">
+                    <h2 className="text-lg line-clamp-1">{title}</h2>
+                    <p  className="line-clamp-4 text-base">{note}</p>
                 </div>
-
-                <div className="note-lower flex justify-between gap-2 w-full">
-                    <div className="note__icons-left flex gap-4 text-lg">
-                        {/* {isPinned ? <BsPinAngleFill /> : <BsPinAngle />} */}
-                        <MdOutlineControlPointDuplicate className="hover:scale-110" onClick={handleDuplicateNote} />
-                        <FiEdit className="hover:scale-110" onClick={handleNoteEdit} />
-
-                        {/* <GoDuplicate /> */}
-                    </div>
-                    <div onClick={handleNoteDelete} className="note__icons-right text-xl">
-                        <MdDeleteForever className="hover:scale-110" />
-                    </div>
+                <div className="flex flex-col gap-1">
+                    {!dateModified && (
+                        <p className="line-clamp-2 text-slate-700 ">Created On: {dateCreated}</p>
+                    )}
+                    {dateModified && (
+                        <p className="line-clamp-2 text-slate-600">Last Modified: {dateModified}</p>
+                    )}
                 </div>
-            </section>
-        </>
+            </div>
+
+            <div className="note-lower flex justify-between gap-2 w-full">
+                <div className="note__icons-left flex gap-4 text-lg">
+                    {/* {isPinned ? <BsPinAngleFill /> : <BsPinAngle />} */}
+                    <MdOutlineControlPointDuplicate
+                        className="hover:scale-110"
+                        onClick={handleDuplicateNote}
+                    />
+                    <FiEdit className="hover:scale-110" onClick={handleNoteEdit} />
+
+                    {/* <GoDuplicate /> */}
+                </div>
+                <div onClick={handleNoteDelete} className="flex gap-2 note__icons-right text-xl">
+                    <MdDeleteForever className="hover:scale-110" />
+                </div>
+            </div>
+        </section>
     );
 }
 

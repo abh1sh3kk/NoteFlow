@@ -50,7 +50,7 @@ export default function NoteView({ handleNoteClick, searchText }) {
                     </article>
                 </section>
             ) : (
-                <div className="note-container content-center grid gap-4 grid-cols-[repeat(auto-fill,minmax(296px,1fr))]">
+                <div className="note-container content-center grid gap-4 grid-cols-[repeat(auto-fill,minmax(296px,1fr))] select-none">
                     {noteList}
                 </div>
             )}

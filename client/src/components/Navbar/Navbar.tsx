@@ -46,7 +46,7 @@ function Navbar() {
 
     return (
         <header className="flex justify-center text-slate-700 bg-transparent">
-            <nav className="max-w-[1050px] w-full flex items-center justify-between h-[64px] border-b-[1px] px-4 border-b-slate-300 gap-4 ">
+            <nav className="max-w-[1050px] w-full flex items-center justify-between h-[64px] border-b-[1px] px-4 border-b-slate-300 gap-4 select-none">
                 <div className="flex items-center justify-center gap-1 logo-side ">
                     <div>
                         <img src={Logo} alt="" className="w-7" />
@@ -78,7 +78,7 @@ function Navbar() {
                     </div>
                 ) : (
                     <div className="flex items-center justify-center right-side gap-2 sm:gap-4">
-                        <div className="flex items-center justify-center gap-2 font-normal p-2 rounded-md hover:bg-fuchsia-300">
+                        <div className="flex items-center justify-center gap-2 font-normal p-2 rounded-md cursor-pointer hover:bg-white">
                             {/* <AiOutlineUser /> */}
                             <FaUser className="text-violet-500" />
                             <p className="font-normal">{username}</p>

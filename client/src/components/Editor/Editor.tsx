@@ -9,7 +9,6 @@ function Editor({
     mode,
     noteDetails: { id, title, note, color, dateCreated, dateModified },
 }) {
-    //color
     const INITIAL_COLOR = "#FFF6C7";
     const [selectedColor, setSelectedColor] = useState(color || INITIAL_COLOR);
 
@@ -60,7 +59,7 @@ function Editor({
     return (
         <main className="min-h-screen min-w-full bg-black bg-opacity-40 text-white fixed scroll-m-8 top-0 left-0 flex justify-center items-center">
             {/* Popup area */}
-            <div className="my-0 lg:my-4 lg:rounded-md w-full h-[96vh] overflow-auto bg-texture bg-white bg-fixed bg-cover flex sm:pt-10 max-w-[850px] justify-center items-center p-4 relative">
+            <div className="my-0 lg:my-4 lg:rounded-md w-full h-[96vh] overflow-auto bg-texture bg-white bg-fixed bg-cover flex sm:pt-6 max-w-[850px] justify-center items-center p-4 relative">
                 <button
                     onClick={handleCrossButton}
                     className="text-slate-600 absolute top-2 right-2"

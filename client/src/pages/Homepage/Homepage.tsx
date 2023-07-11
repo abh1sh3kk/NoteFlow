@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { CiSearch } from "react-icons/ci";
 import { useSelector } from "react-redux";
@@ -25,11 +25,12 @@ function Homepage() {
     const handleSearch = (e: any) => {
         setSearchText(e.target.value);
     };
+    const searchRef = useRef<HTMLInputElement>();
 
     useEffect(() => {
         if (username === null) return;
         if (username === "") {
-            navigate('/users/signup')
+            navigate("/users/signup");
         } else fetchNotes();
     }, [username]);
 
@@ -81,6 +82,24 @@ function Homepage() {
         });
     };
 
+    // // ------------Shortcuts----------------
+    // useEffect(() => {
+    //         searchRef.current.addEventListener("focus", () => {
+    //             if (searchRef.current) searchRef.current.value = "";
+    //         });
+    //     const searchText = searchRef.current?.textContent;
+    //     const handleShortcut = (e: KeyboardEvent) => {
+    //         if (e.key === "N" && e.shiftKey) handleCreateNote();
+    //         if (e.key === "/") searchRef.current?.focus();
+
+    //         if (e.key === "Escape") searchRef.current?.blur();
+    //     };
+    //     document.addEventListener("keydown", handleShortcut);
+    //     return () => {
+    //         document.removeEventListener("keydown", handleShortcut);
+    //     };
+    // }, []);
+
     return (
         <main className="bg-mesh-bright bg-cover min-h-screen">
             <Navbar />
@@ -92,7 +111,7 @@ function Homepage() {
                                 disabled={username === null}
                                 style={username === null ? { opacity: "60%" } : {}}
                                 onClick={handleCreateNote}
-                                className="flex justify-center items-center gap-1 sm:gap-2 bg-purple-500 text-white py-2 pe-4 ps-3 sm:py-2 sm:ps-3 sm:pe-5 rounded-md"
+                                className="flex justify-center items-center select-none gap-1 sm:gap-2 bg-purple-500 text-white py-2 pe-4 ps-3 sm:py-2 sm:ps-3 sm:pe-5 rounded-md"
                             >
                                 <AiOutlinePlus />
                                 <span className="text-sm sm:text-base">Create a note</span>
@@ -104,6 +123,7 @@ function Homepage() {
                                 placeholder="Search..."
                                 value={searchText}
                                 onChange={handleSearch}
+                                ref={searchRef}
                                 className="ps-8 h-10 w-[8rem] sm:w-auto text-sm rounded-md outline-transparent border-none focus:outline-purple-400 focus:outline-[1px]"
                             />
                         </div>

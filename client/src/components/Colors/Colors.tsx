@@ -28,7 +28,11 @@ function Colors({ selectedColor, handleColorChange }) {
 
         const colorStyle =
             selectedColor.toUpperCase() === color
-                ? { backgroundColor: increaseIntensity(color), border: "3px solid #aeaeae" }
+                ? {
+                      backgroundColor: increaseIntensity(color),
+                      border: "2px solid rgb(86 86 86)",
+                      boxShadow: "-5px 0px 42px -1px rgba(0,0,0,0.46)",
+                  }
                 : { backgroundColor: increaseIntensity(color), border: "3px solid transparent" };
 
         return (
