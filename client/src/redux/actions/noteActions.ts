@@ -147,9 +147,9 @@ export async function editNote(
     alert("Couldn't be edited. Sorry.");
 }
 
-export function fetchUserData() {
-    fetchUser();
-    fetchNotes();
+export async function fetchUserData() {
+    await fetchUser();
+    await fetchNotes();
 }
 
 export function clearNotes() {

@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../../Backend Development/NoteFlow2.0"
 		}
 	],
 	"settings": {}
